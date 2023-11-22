@@ -21,7 +21,7 @@ body {
     display: inline-flex; /* Enables the use of flexbox properties */
     justify-content: center; /* Horizontally centers the content */
     align-items: center; /* Vertically centers the content */
-    width: 5vw;
+    width: 8vw;
     height: 5vh;
     margin: 5px;
     border: 1px solid black;
