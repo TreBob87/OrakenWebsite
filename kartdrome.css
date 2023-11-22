@@ -34,117 +34,69 @@ body {
 
 /* Navbar styling */
 
-.hamburger-icon {
-    position: absolute;
-    z-index: 1;
-    top: 5vh;
-    left: 5vw;
-    padding-bottom: 2vh;
+nav {
+    width: 300px;
+    background: white;
+    color: rgba(0, 0, 0, 0.87);
+    -webkit-clip-path: circle(24px at 30px 24px);
+    clip-path: circle(24px at 32px 24px);
+    -webkit-transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
+    transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
 }
 
-.hamburger-icon span {
-    height: 5px;
-    width: 40px;
-    background-color: white;
+nav:hover {
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+    -webkit-transition-duration: 0.75s;
+    transition-duration: 0.75s;
+    -webkit-clip-path: circle(390px at 225px 24px);
+    clip-path: circle(390px at 150px 24px);
+}
+
+a {
     display: block;
-    margin: 5px 0px 5px 0px;
-    transition: 0.7s ease-in-out;
-    transform: none;
+    line-height: 50px;
+    padding: 0 20px;
+    color: inherit;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-#openmenu:checked ~ .menu-pane {
-    left: -5vw;
-    transform: translateX(-5vw);
+a:hover { background: #ffe082; }
+
+a:active { background: #ffca28; }
+
+.navicon {
+    padding: 23px 20px;
+    cursor: pointer;
+    -webkit-transform-origin: 32px 24px;
+    -ms-transform-origin: 32px 24px;
+    transform-origin: 32px 24px;
 }
 
-#openmenu:checked ~ .body-text {
-    display: none;
+.navicon div {
+    position: relative;
+    width: 20px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.87);
 }
 
-#openmenu:checked ~ .hamburger-icon span:nth-of-type(2) {
-    transform: translate(0%, 175%) rotate(-45deg);
-    background-color: white;
-}
-
-#openmenu:checked ~ .hamburger-icon span:nth-of-type(3) {
-    transform: rotate(45deg);
-    background-color: white;
-}
-
-#openmenu:checked ~ .hamburger-icon span:nth-of-type(1) {
-    opacity: 0;
-}
-
-#openmenu:checked ~ .hamburger-icon span:nth-of-type(4) {
-    opacity: 0;
-}
-
-div.menu-pane {
-    background-color: #000;
+.navicon div:before,
+.navicon div:after {
+    display: block;
+    content: "";
+    width: 20px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.87);
     position: absolute;
-    transform: translateX(-105vw);
-    width: 100vw;
-    height: 100%;
-    transition: 0.6s ease-in-out;
 }
 
-.menu-pane nav {
-    padding: 10%;
-}
+.navicon div:before { top: -7px; }
 
-.menu-links li, a, span {
-    transition: 0.5s ease-in-out;
-}
-
-.menu-pane ul {
-    padding: 10%;
-    display: inline-block;
-}
-
-.menu-pane li {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-left: 10px;
-    font-size: 1em;
-}
-
-
-.menu-pane li:first-child {
-    font-size: 1.3em;
-}
-
-#team {
-    margin-left: -10px;
-}
-
-.menu-links li a {
-    color: white;
-    text-decoration: none;
-}
-
-
-.menu-links li:hover a {
-    color: #2ABFAB;
-}
-
-.menu-links li:first-child:hover a {
-    color: black;
-    background-color: #2ABFAB;
-}
-
-.menu-links li:first-child a {
-    padding: 5px;
-}
-
-input.hamburger-checkbox {
-    position: absolute;
-    z-index: 3;
-    top: 5vh;
-    left: 5vw;
-    width: 5vw;
-    opacity: 0;
-    height: 6vh;
-}
+.navicon div:after { top: 7px; }
 
 .raceReset {
     margin-top: 20px;
