@@ -104,10 +104,8 @@ function handleBoxClick(event) {
         if (lastClickedBox.track && lastClickedBox.pit) {
             swapColors();
             // After swapping, reset both to require new selections for the next swap
-            console.log("Before reset", lastClickedBox);
             lastClickedBox.track = null;
             lastClickedBox.pit = null;
-            console.log("After reset", lastClickedBox);
 
         }
     }
