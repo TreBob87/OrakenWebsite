@@ -106,7 +106,6 @@ function handleBoxClick(event) {
             // After swapping, reset both to require new selections for the next swap
             lastClickedBox.track = null;
             lastClickedBox.pit = null;
-
         }
     }
 }
