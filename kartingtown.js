@@ -123,11 +123,23 @@ function createBoxes(containerId, count, labelPrefix) {
         box.classList.add('box');
         box.id = `${containerId}-${i}`;
         box.style.backgroundColor = 'grey';
-        box.textContent = labelPrefix + i;
-        container.appendChild(box);
+        if (labelPrefix === 'Kart ') {
+            box.textContent = i;
+        }
+        else {
+            box.textContent = labelPrefix + i;
+        }
 
-        if (i % 10 === 0) {
-            container.appendChild(document.createElement('br'));
+        container.appendChild(box);
+        if (containerId === 'kartsOnTrack') {
+            if (i % 5 === 0) {
+                container.appendChild(document.createElement('br'));
+            }
+        }
+        else {
+            if (i % 6 === 0) {
+                container.appendChild(document.createElement('br'));
+            }
         }
     }
 }

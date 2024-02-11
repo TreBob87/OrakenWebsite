@@ -7,8 +7,11 @@ body {
 }
 
 .container {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
+    position: relative; /* Adjust as needed based on your layout */
+    z-index: 1; /* Ensure content is above background but below navbar */
+    padding-top: 50px; /* Adjust based on navbar height */
 }
 
 .section {
@@ -31,10 +34,21 @@ body {
     white-space: nowrap; /* Ensures the text stays on a single line */
 }
 
+@media screen and (max-width: 600px) {
+    .box {
+        width: 10vw;
+    }
+    .container {
+        width: 90%;
+    }
+}
+
 /* Navbar styling */
 
 
 nav {
+    position: absolute;
+    z-index: 2;
     width: 300px;
     background: white;
     color: rgba(0, 0, 0, 0.87);

@@ -20,7 +20,20 @@ function createBoxes(containerId, count, labelPrefix) {
         box.classList.add('box');
         box.id = `${containerId}-${i}`;  // Unique ID for each box
         box.style.backgroundColor = 'grey';
-        box.textContent = labelPrefix + i;
+        if (labelPrefix === 'Kart ') {
+            box.textContent = i;
+        }
+        else {
+            if (labelPrefix === 'Lane ') {
+                if (i % 2 !== 0) {
+                    box.textContent = labelPrefix + 1;
+                }
+                else {
+                    box.textContent = labelPrefix + 2;
+                }
+            }
+
+        }
         container.appendChild(box);
 
         if(containerId === 'kartsInPit') {
