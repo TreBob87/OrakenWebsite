@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="kartUsage.css">
+    <title>Car Usage Display</title>
+</head>
+<body>
+<nav>
+    <div class="navicon">
+        <div></div>
+    </div>
+
+    <a href="index.html">Home</a>
+    <a href="kartdrome.html">Dubai Kartdrome</a>
+    <a href="kartingtown.html">Karting Town</a>
+    <a href="yas.html">Yas Kartzone</a>
+    <a href="kartUsage.html">Karts used</a>
+
+</nav>
+<div class="container">
+    <div id="carUsageDisplay"></div>
+</div>
+
+
+<script>
+    // Function to load and display teamCarUsage
+    function displayTeamCarUsage() {
+        const display = document.getElementById('carUsageDisplay');
+        const loadedData = localStorage.getItem('teamCarUsage');
+        if (loadedData) {
+            const teamCarUsage = JSON.parse(loadedData);
+            let content = '<ul>';
+            for (const [team, cars] of Object.entries(teamCarUsage)) {
+                content += `<li><strong>${team}:</strong> ${cars.join(', ')}</li>`;
+            }
+            content += '</ul>';
+            display.innerHTML = content;
+        } else {
+            display.innerHTML = '<p>No car usage data available.</p>';
+        }
+    }
+
+    // Call displayTeamCarUsage on page load
+    window.onload = displayTeamCarUsage;
+</script>
+</body>
+</html>

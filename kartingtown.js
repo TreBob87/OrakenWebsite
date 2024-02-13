@@ -96,7 +96,6 @@ function moveColors(selectedTrackBox) {
     saveBoxColor(selectedTrackBox);
 }
 
-// ... [previous code] ...
 
 function pickColor(event) {
     if (event.target.classList.contains('box')) {

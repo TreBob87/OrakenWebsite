@@ -1,7 +1,8 @@
 window.onload = function() {
+    loadTeamCarUsage();
     // Load counts from localStorage or use default values
     const kartsOnTrackCount = parseInt(localStorage.getItem('kartsOnTrackCount'), 10) || 45;
-    const kartsInPitCount = parseInt(localStorage.getItem('kartsInPitCount'), 10) || 6;
+    const kartsInPitCount = parseInt(localStorage.getItem('kartsInPitCount'), 10) || 5;
 
     // Use the loaded or default counts to create boxes
     createBoxes('kartsOnTrack', kartsOnTrackCount, 'Kart ');
@@ -17,30 +18,45 @@ window.onload = function() {
 
 let selectedColor = '';
 let lastClickedBox = { track: null, pit: null };
+let teamCarUsage = {}; // Object to track car usage by teams
 
 function createBoxes(containerId, count, labelPrefix) {
     const container = document.getElementById(containerId);
-    for (let i = 1; i <= count; i++) {
+    let startId = 0;
+    if (containerId === 'kartsInPit') {
+        // Adjust the startId for kartsInPit based on kartsOnTrack
+        const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box');
+        if (kartsOnTrack.length > 0) {
+            const lastKartOnTrackId = parseInt(kartsOnTrack[kartsOnTrack.length - 1].getAttribute('data-car-id'));
+            startId = lastKartOnTrackId;
+        }
+    }
+
+    for (let i = 1; i < count + 1; i++) {
         const box = document.createElement('div');
         box.classList.add('box');
-        box.id = `${containerId}-${i}`;  // Unique ID for each box
+        const carId = startId + i;
+        box.id = `${containerId}-${carId}`;
+        box.setAttribute('data-car-id', carId.toString());
         box.style.backgroundColor = 'grey';
-        console.log(labelPrefix)
-        if (labelPrefix === 'Kart ') {
+
+        if (containerId === 'kartsOnTrack') {
             box.textContent = i;
-        }
-        else {
+            // Initialize or update the team's initial car in teamCarUsage
+            if (!teamCarUsage[i]) {
+                teamCarUsage[i] = [carId.toString()];
+            }
+        } else {
             box.textContent = labelPrefix + i;
         }
 
         container.appendChild(box);
-        if (containerId === 'kartsOnTrack') {
-            if (i % 5 === 0) {
-                container.appendChild(document.createElement('br'));
-            }
-        }
     }
+    // Save the updated team car usage after initialization or any change
+    saveTeamCarUsage();
 }
+
+
 
 function loadBoxColors() {
     const boxes = document.querySelectorAll('.box');
@@ -73,51 +89,48 @@ function createCustomCursor(color) {
 }
 
 function pickColor(event) {
-    if (event.target.classList.contains('box')) {
-        selectedColor = event.target.style.backgroundColor;
-        createCustomCursor(selectedColor);
-        lastClickedBox.track = null;
-        lastClickedBox.pit = null;
-    }
+    // Assume event.target is the element representing the color choice
+    selectedColor = event.target.style.backgroundColor; // Or any other way you're setting this
+    createCustomCursor(selectedColor); // Optional, if you want to visually indicate the selected color
 }
+
 
 function handleBoxClick(event) {
     if (event.target.classList.contains('box')) {
         const box = event.target;
-        const parentID = box.parentNode.id;
 
-        if (selectedColor !== '') {
+        // Only apply the selected color if one is currently chosen
+        if (selectedColor) {
             box.style.backgroundColor = selectedColor;
-            saveBoxColor(box);
-            selectedColor = '';
-            document.body.style.cursor = 'default'; // Reset cursor
-        } else {
-            if (parentID === 'kartsOnTrack') {
-                lastClickedBox.track = box;
-                swapColors();
-            } else if (parentID === 'kartsInPit') {
-                lastClickedBox.pit = box;
-                swapColors();
-            }
+            saveBoxColor(box); // Persist the color change
+
+            document.body.style.cursor = 'default'; // Reset cursor to default
+
+            selectedColor = ''; // Clear the selectedColor after applying it
+
+            return; // Exit the function to prevent any further action
+        }
+
+        // Swapping logic (remains unchanged)
+        const parentID = box.parentNode.id;
+        if (parentID === 'kartsOnTrack') {
+            lastClickedBox.track = box;
+        } else if (parentID === 'kartsInPit') {
+            lastClickedBox.pit = box;
+        }
+        if (lastClickedBox.track && lastClickedBox.pit) {
+            swapColorsAndIds();
+            // Reset selections to require new clicks before another swap
+            lastClickedBox.track = null;
+            lastClickedBox.pit = null;
         }
     }
 }
 
-function swapColors() {
-    if (lastClickedBox.track && lastClickedBox.pit) {
-        const trackBox = lastClickedBox.track;
-        const pitBox = lastClickedBox.pit;
 
-        [trackBox.style.backgroundColor, pitBox.style.backgroundColor] =
-            [pitBox.style.backgroundColor, trackBox.style.backgroundColor];
 
-        saveBoxColor(trackBox);
-        saveBoxColor(pitBox);
 
-        lastClickedBox.track = null;
-        lastClickedBox.pit = null;
-    }
-}
+
 
 function resetColors() {
     if (confirm('Are you sure you want to reset all colors and change the number of karts?')) {
@@ -141,6 +154,10 @@ function resetColors() {
             localStorage.removeItem(box.id); // Remove color from localStorage
         });
 
+        // Reset the teamCarUsage
+        teamCarUsage = {};
+        saveTeamCarUsage(); // Save the reset state to localStorage
+
         // Remove existing boxes from the DOM
         document.getElementById('kartsOnTrack').innerHTML = '';
         document.getElementById('kartsInPit').innerHTML = '';
@@ -148,5 +165,72 @@ function resetColors() {
         // Create new boxes with the specified numbers
         createBoxes('kartsOnTrack', validKartsOnTrackCount, 'Kart ');
         createBoxes('kartsInPit', validKartsInPitCount, 'Lane ');
+
+        // Optionally, refresh the display of car usage
+        displayCarUsage();
     }
 }
+
+
+function saveTeamCarUsage() {
+    localStorage.setItem('teamCarUsage', JSON.stringify(teamCarUsage));
+}
+
+
+function loadTeamCarUsage() {
+    const loadedData = localStorage.getItem('teamCarUsage');
+    if (loadedData) {
+        teamCarUsage = JSON.parse(loadedData);
+    } else {
+        teamCarUsage = {}; // Initialize if not present
+    }
+}
+
+
+
+function displayCarUsage() {
+    const display = document.getElementById('carUsageDisplay');
+    let content = '<h3>Team Car Usage:</h3>';
+
+    for (const [team, cars] of Object.entries(teamCarUsage)) {
+        content += `<p><strong>${team}:</strong> ${cars.join(', ')}</p>`;
+    }
+
+    display.innerHTML = content;
+}
+function swapColorsAndIds() {
+    if (lastClickedBox.track && lastClickedBox.pit) {
+        const trackBox = lastClickedBox.track;
+        const pitBox = lastClickedBox.pit;
+
+        // Perform the color and ID swap
+        let tempColor = trackBox.style.backgroundColor;
+        trackBox.style.backgroundColor = pitBox.style.backgroundColor;
+        pitBox.style.backgroundColor = tempColor;
+
+        let tempId = trackBox.getAttribute('data-car-id');
+        trackBox.setAttribute('data-car-id', pitBox.getAttribute('data-car-id'));
+        pitBox.setAttribute('data-car-id', tempId);
+
+        // Update the teamCarUsage to reflect the swap, including duplicates
+        const teamNumber = trackBox.textContent.replace('Team ', '');
+        if (!teamCarUsage[teamNumber]) {
+            teamCarUsage[teamNumber] = [];
+        }
+
+        // Append the new car ID to the team's list every time a swap occurs
+        teamCarUsage[teamNumber].push(trackBox.getAttribute('data-car-id'));
+
+        // Save changes
+        saveBoxColor(trackBox);
+        saveBoxColor(pitBox);
+        saveTeamCarUsage(); // Ensure this function saves teamCarUsage to localStorage
+
+        // Reset the selected boxes to require new selections for another swap
+        lastClickedBox.track = null;
+        lastClickedBox.pit = null;
+    }
+}
+
+
+
