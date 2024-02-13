@@ -1,6 +1,11 @@
 window.onload = function() {
-    createBoxes('kartsOnTrack', 15, 'Kart ');
-    createBoxes('kartsInPit', 4, 'Lane ');
+    // Load counts from localStorage or use default values
+    const kartsOnTrackCount = parseInt(localStorage.getItem('kartsOnTrackCount'), 10) || 15;
+    const kartsInPitCount = parseInt(localStorage.getItem('kartsInPitCount'), 10) || 4;
+
+    // Use the loaded or default counts to create boxes
+    createBoxes('kartsOnTrack', kartsOnTrackCount, 'Kart ');
+    createBoxes('kartsInPit', kartsInPitCount, 'Lane ');
     loadBoxColors();
 
     // Add event listeners
@@ -41,7 +46,7 @@ function createBoxes(containerId, count, labelPrefix) {
                 container.appendChild(document.createElement('br'));
             }
         } else {
-            if (i % 10 === 0) {
+            if (i % 5 === 0) {
                 container.appendChild(document.createElement('br'));
             }
         }
@@ -177,13 +182,16 @@ function swapColors() {
 
 function resetColors() {
     if (confirm('Are you sure you want to reset all colors and change the number of karts?')) {
-        // Ask for the number of karts on track and in pit
+        // Ask and validate the new counts
         const kartsOnTrackCount = parseInt(prompt("Enter the number of Karts-on-Track:", "15"), 10);
         const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "4"), 10);
 
-        // Validate input and provide default values if invalid
         const validKartsOnTrackCount = isNaN(kartsOnTrackCount) ? 15 : kartsOnTrackCount;
         const validKartsInPitCount = isNaN(kartsInPitCount) ? 4 : kartsInPitCount;
+
+        // Save these counts to localStorage
+        localStorage.setItem('kartsOnTrackCount', validKartsOnTrackCount);
+        localStorage.setItem('kartsInPitCount', validKartsInPitCount);
 
         // Remove existing boxes and their colors from localStorage
         const trackBoxes = document.querySelectorAll('#kartsOnTrack .box');
@@ -201,10 +209,5 @@ function resetColors() {
         // Create new boxes with the specified numbers
         createBoxes('kartsOnTrack', validKartsOnTrackCount, 'Kart ');
         createBoxes('kartsInPit', validKartsInPitCount, 'Lane ');
-
-        // Optionally, if you want to remove all localStorage entries not related to the current setup,
-        // you could list all keys, filter out those not matching the current setup, and remove them.
-        // This would require a more complex logic to identify which keys belong to the current setup
-        // and is not shown here due to the simplicity of the current identifier scheme.
     }
 }
