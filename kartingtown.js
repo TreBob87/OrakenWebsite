@@ -1,7 +1,7 @@
 window.onload = function() {
 
     createBoxes('kartsOnTrack', 15, 'Kart ');
-    createBoxes('kartsInPit', 6, 'Lane ');
+    createBoxes('kartsInPit', 4, 'Lane ');
     loadBoxColors();
 
     // Add event listeners
@@ -28,13 +28,22 @@ function resetColors() {
     if (confirm('Are you sure you want to reset all colors and change the number of karts?')) {
         // Ask for the number of karts on track and in pit
         const kartsOnTrackCount = parseInt(prompt("Enter the number of Karts-on-Track:", "15"), 10);
-        const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "6"), 10);
+        const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "4"), 10);
 
         // Validate input and provide default values if invalid
-        const validKartsOnTrackCount = isNaN(kartsOnTrackCount) ? 45 : kartsOnTrackCount;
-        const validKartsInPitCount = isNaN(kartsInPitCount) ? 6 : kartsInPitCount;
+        const validKartsOnTrackCount = isNaN(kartsOnTrackCount) ? 15 : kartsOnTrackCount;
+        const validKartsInPitCount = isNaN(kartsInPitCount) ? 3 : kartsInPitCount;
 
-        // Remove existing boxes
+        // Remove existing boxes and their colors from localStorage
+        const trackBoxes = document.querySelectorAll('#kartsOnTrack .box');
+        const pitBoxes = document.querySelectorAll('#kartsInPit .box');
+        const allBoxes = [...trackBoxes, ...pitBoxes];
+
+        allBoxes.forEach(box => {
+            localStorage.removeItem(box.id); // Remove color from localStorage
+        });
+
+        // Remove existing boxes from the DOM
         document.getElementById('kartsOnTrack').innerHTML = '';
         document.getElementById('kartsInPit').innerHTML = '';
 
@@ -42,17 +51,13 @@ function resetColors() {
         createBoxes('kartsOnTrack', validKartsOnTrackCount, 'Kart ');
         createBoxes('kartsInPit', validKartsInPitCount, 'Lane ');
 
-        // Reset colors
-        const trackBoxes = document.querySelectorAll('#kartsOnTrack .box');
-        const pitBoxes = document.querySelectorAll('#kartsInPit .box');
-        const allBoxes = [...trackBoxes, ...pitBoxes];
-
-        allBoxes.forEach(box => {
-            box.style.backgroundColor = 'grey';
-            saveBoxColor(box);
-        });
+        // Optionally, if you want to remove all localStorage entries not related to the current setup,
+        // you could list all keys, filter out those not matching the current setup, and remove them.
+        // This would require a more complex logic to identify which keys belong to the current setup
+        // and is not shown here due to the simplicity of the current identifier scheme.
     }
 }
+
 
 
 function handleBoxClick(event) {
