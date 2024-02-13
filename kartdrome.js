@@ -118,7 +118,7 @@ function resetColors() {
     if (confirm('Are you sure you want to reset all colors and change the number of karts?')) {
         // Ask for the number of karts on track and in pit
         const kartsOnTrackCount = parseInt(prompt("Enter the number of Karts-on-Track:", "15"), 10);
-        const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "4"), 10);
+        const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "5"), 10);
 
         // Validate input and provide default values if invalid
         const validKartsOnTrackCount = isNaN(kartsOnTrackCount) ? 45 : kartsOnTrackCount;
