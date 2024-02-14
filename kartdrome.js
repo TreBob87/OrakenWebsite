@@ -14,6 +14,17 @@ window.onload = function() {
     document.getElementById('kartsOnTrack').addEventListener('click', handleBoxClick);
     document.getElementById('kartsInPit').addEventListener('click', handleBoxClick);
     document.getElementById('resetButton').addEventListener('click', resetColors);
+
+    // Add an event listener to the whole document to handle clicks outside boxes
+    document.addEventListener('click', function(event) {
+        if (!event.target.classList.contains('box')) {
+            // If the click is not on a box, remove highlighting from the currently highlighted box
+            if (currentlyHighlighted) {
+                currentlyHighlighted.classList.remove('highlighted');
+                currentlyHighlighted = null; // Reset the reference to the currently highlighted box
+            }
+        }
+    }, true);
 };
 
 let selectedColor = '';
@@ -47,7 +58,7 @@ function createBoxes(containerId, count, labelPrefix) {
                 teamCarUsage[i] = [carId.toString()];
             }
         } else {
-            box.textContent = labelPrefix + i;
+            box.textContent = i;
         }
 
         container.appendChild(box);
@@ -87,29 +98,50 @@ function createCustomCursor(color) {
     const cursorUrl = canvas.toDataURL();
     document.body.style.cursor = `url(${cursorUrl}) ${cursorSize / 2} ${cursorSize / 2}, auto`;
 }
-
+let currentlyHighlighted = null; // Track the currently highlighted box
 function pickColor(event) {
+
     lastClickedBox.track = null;
     lastClickedBox.pit = null;
-    currentlyHighlighted.classList.remove('highlighted');
     // Assume event.target is the element representing the color choice
     selectedColor = event.target.style.backgroundColor; // Or any other way you're setting this
     createCustomCursor(selectedColor); // Optional, if you want to visually indicate the selected color
 }
 
-let currentlyHighlighted = null; // Track the currently highlighted box
+
 function handleBoxClick(event) {
+    // Check if the click is within the kartPerformance section
+    if (event.currentTarget.id === 'kartPerformance') {
+        // Do nothing if the click is within the kartPerformance section
+        return;
+    }
+
     if (event.target.classList.contains('box')) {
         const box = event.target;
+
+        // Check if a color has been selected from kartPerformance
+        if (selectedColor) {
+            // Apply the selected color to the box
+            box.style.backgroundColor = selectedColor;
+            saveBoxColor(box); // Save the color change
+
+            // Reset the selectedColor to indicate the color assignment is complete
+            selectedColor = '';
+            document.body.style.cursor = 'default'; // Reset cursor to default
+
+            // Do not proceed with any highlighting since a color assignment was made
+            return;
+        }
 
         // Remove highlighting from the previously selected box
         if (currentlyHighlighted && currentlyHighlighted !== box) {
             currentlyHighlighted.classList.remove('highlighted');
         }
 
-        // Toggle the highlight on the current box
+        // If no color is selected (i.e., color assignment isn't in progress), toggle highlighting
         box.classList.toggle('highlighted');
         currentlyHighlighted = box.classList.contains('highlighted') ? box : null;
+
 
         // Only apply the selected color if one is currently chosen
         if (selectedColor) {
@@ -135,14 +167,18 @@ function handleBoxClick(event) {
             // Reset selections to require new clicks before another swap
             lastClickedBox.track = null;
             lastClickedBox.pit = null;
-            currentlyHighlighted.classList.remove('highlighted');
+            if (currentlyHighlighted) {
+                currentlyHighlighted.classList.remove('highlighted');
+            }
         }
     }
     else {
+        // If the click is not on a box, clear the last clicked boxes
         lastClickedBox.track = null;
         lastClickedBox.pit = null;
     }
 }
+
 
 
 

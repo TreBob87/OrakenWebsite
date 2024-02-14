@@ -6,58 +6,64 @@ body {
     background-size: 100%;
     box-sizing: border-box;
     background-position: center;
+    margin: 0; /* Ensure body has no margin */
 }
 
 .container {
     width: 100%;
     margin: 0 auto;
-    position: relative; /* Adjust as needed based on your layout */
-    z-index: 1; /* Ensure content is above background but below navbar */
-    padding-top: 50px; /* Adjust based on navbar height */
+    position: relative;
+    z-index: 1;
+    padding-top: 50px;
 }
 
 .section {
+    display: flex; /* Use flexbox to arrange items */
+    justify-content: center; /* Center flex items horizontally */
+    flex-wrap: wrap; /* Allow items to wrap as needed */
     margin-bottom: 20px;
 }
 
+#kartsInPit .box {
+    width: 12vw;
+    height: 8vh;
+}
+
 .box {
-    display: inline-flex; /* Enables the use of flexbox properties */
-    justify-content: center; /* Horizontally centers the content */
-    align-items: center; /* Vertically centers the content */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     width: 8vw;
     height: 5vh;
     margin: 5px;
     border: 1px solid black;
     cursor: pointer;
-    font-size: 12px; /* Adjust the font size as needed */
+    font-size: 12px;
     text-align: center;
-    overflow: hidden; /* Prevents text overflow */
-    text-overflow: ellipsis; /* Adds an ellipsis if the text overflows */
-    white-space: nowrap; /* Ensures the text stays on a single line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-
-/* On screens that are 600px or less, set the background color to olive */
 @media screen and (max-width: 600px) {
+    #kartsInPit .box {
+        width: 16vw;
+        height: 8vh;
+    }
     .box {
-        width: 10vw;
+        width: 14vw;
     }
     .container {
-        width: 90%;
-    }
-
-    #kartsInPit {
-        .box {
-            width: 15%;
-            height: 8vh;
-        }
+        width: 100%;
     }
 }
 
 .highlighted {
-    border: 2px solid #FFD700; /* Or any other visually distinct style */
-    box-shadow: 0 0 10px #FFD700; /* Optional, for added emphasis */
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 10px #FFD700;
 }
+
+/* The rest of your CSS for nav, a, .navicon, and #resetButton remains unchanged */
 
 
 /* Navbar styling */
