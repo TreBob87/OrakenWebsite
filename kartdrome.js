@@ -89,6 +89,8 @@ function createCustomCursor(color) {
 }
 
 function pickColor(event) {
+    lastClickedBox.track = null;
+    lastClickedBox.pit = null;
     // Assume event.target is the element representing the color choice
     selectedColor = event.target.style.backgroundColor; // Or any other way you're setting this
     createCustomCursor(selectedColor); // Optional, if you want to visually indicate the selected color
