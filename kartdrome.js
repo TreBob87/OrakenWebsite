@@ -91,15 +91,25 @@ function createCustomCursor(color) {
 function pickColor(event) {
     lastClickedBox.track = null;
     lastClickedBox.pit = null;
+    currentlyHighlighted.classList.remove('highlighted');
     // Assume event.target is the element representing the color choice
     selectedColor = event.target.style.backgroundColor; // Or any other way you're setting this
     createCustomCursor(selectedColor); // Optional, if you want to visually indicate the selected color
 }
 
-
+let currentlyHighlighted = null; // Track the currently highlighted box
 function handleBoxClick(event) {
     if (event.target.classList.contains('box')) {
         const box = event.target;
+
+        // Remove highlighting from the previously selected box
+        if (currentlyHighlighted && currentlyHighlighted !== box) {
+            currentlyHighlighted.classList.remove('highlighted');
+        }
+
+        // Toggle the highlight on the current box
+        box.classList.toggle('highlighted');
+        currentlyHighlighted = box.classList.contains('highlighted') ? box : null;
 
         // Only apply the selected color if one is currently chosen
         if (selectedColor) {
@@ -125,7 +135,12 @@ function handleBoxClick(event) {
             // Reset selections to require new clicks before another swap
             lastClickedBox.track = null;
             lastClickedBox.pit = null;
+            currentlyHighlighted.classList.remove('highlighted');
         }
+    }
+    else {
+        lastClickedBox.track = null;
+        lastClickedBox.pit = null;
     }
 }
 
