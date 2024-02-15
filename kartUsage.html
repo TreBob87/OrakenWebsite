@@ -22,28 +22,9 @@
 <div class="container">
     <div id="carUsageDisplay"></div>
 </div>
+<button onclick="exportTeamCarUsage()">Export Team Car Usage</button>
 
 
-<script>
-    // Function to load and display teamCarUsage
-    function displayTeamCarUsage() {
-        const display = document.getElementById('carUsageDisplay');
-        const loadedData = localStorage.getItem('teamCarUsage');
-        if (loadedData) {
-            const teamCarUsage = JSON.parse(loadedData);
-            let content = '<ul>';
-            for (const [team, cars] of Object.entries(teamCarUsage)) {
-                content += `<li><strong>${team}:</strong> ${cars.join(', ')}</li>`;
-            }
-            content += '</ul>';
-            display.innerHTML = content;
-        } else {
-            display.innerHTML = '<p>No car usage data available.</p>';
-        }
-    }
-
-    // Call displayTeamCarUsage on page load
-    window.onload = displayTeamCarUsage;
-</script>
+<script src="kartUsage.js"></script>
 </body>
 </html>

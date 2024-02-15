@@ -96,6 +96,9 @@ function handleBoxClick(event) {
     if (event.target.classList.contains('box')) {
         const box = event.target;
         const parentID = box.parentNode.id;
+        if (navigator.vibrate) {
+            navigator.vibrate(50); // You can adjust the duration as needed
+        }
 
         // Apply selected color from kartPerformance
         if (selectedColor !== '' && (parentID === 'kartsOnTrack' || parentID.includes('kartsInPit'))) {
