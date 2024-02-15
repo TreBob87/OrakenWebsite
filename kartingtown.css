@@ -2,8 +2,11 @@
 @import url(https://fonts.googleapis.com/css?family=Oswald:400,300);
 body {
     font-family: "Poppins", sans-serif;
-    background-image: url("Pictures/KartingTown.jpg");
-    background-size: cover;
+    background-image: url("Pictures/Kartdrome.jpg");
+    background-size: 100%;
+    box-sizing: border-box;
+    background-position: center;
+    margin: 0; /* Ensure body has no margin */
 }
 
 .container {
@@ -15,31 +18,49 @@ body {
 }
 
 .section {
+    display: flex; /* Use flexbox to arrange items */
+    justify-content: center; /* Center flex items horizontally */
+    flex-wrap: wrap; /* Allow items to wrap as needed */
     margin-bottom: 20px;
 }
 
+.highlighted {
+    border: 2px solid #FFD700; /* Gold border */
+    box-shadow: 0 0 10px #FFD700; /* Gold glow */
+}
+
+
+#kartsInPit .box {
+    width: 12vw;
+    height: 8vh;
+}
+
 .box {
-    display: inline-flex; /* Enables the use of flexbox properties */
-    justify-content: center; /* Horizontally centers the content */
-    align-items: center; /* Vertically centers the content */
-    width: 50px;
-    height: 50px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 8vw;
+    height: 5vh;
     margin: 5px;
     border: 1px solid black;
     cursor: pointer;
-    font-size: 12px; /* Adjust the font size as needed */
+    font-size: 12px;
     text-align: center;
-    overflow: hidden; /* Prevents text overflow */
-    text-overflow: ellipsis; /* Adds an ellipsis if the text overflows */
-    white-space: nowrap; /* Ensures the text stays on a single line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 @media screen and (max-width: 600px) {
+    #kartsInPit .box {
+        width: 16vw;
+        height: 8vh;
+    }
     .box {
-        width: 10vw;
+        width: 14vw;
     }
     .container {
-        width: 90%;
+        width: 100%;
     }
 }
 

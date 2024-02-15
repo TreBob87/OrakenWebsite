@@ -64,6 +64,17 @@ function resetColors() {
 
 function handleBoxClick(event) {
     if (event.target.classList.contains('box')) {
+
+        // Vibrate the device for 50 milliseconds as feedback on box click
+        if (navigator.vibrate) {
+            navigator.vibrate(50); // You can adjust the duration as needed
+        }
+
+        // Remove highlight from the previously selected kartsOnTrack box
+        if (lastClickedBox.track) {
+            lastClickedBox.track.classList.remove('highlighted');
+        }
+
         if (selectedColor) {
             // Apply selected color and reset
             event.target.style.backgroundColor = selectedColor;
@@ -73,6 +84,8 @@ function handleBoxClick(event) {
             // Proceed with swap logic if no color is selected
             if (event.target.parentNode.id === 'kartsOnTrack') {
                 moveColors(event.target);
+                box.classList.add('highlighted');
+                lastClickedBox.track = box; // Track the latest kartsOnTrack selection
             }
         }
     }

@@ -119,6 +119,11 @@ function handleBoxClick(event) {
     if (event.target.classList.contains('box')) {
         const box = event.target;
 
+        // Vibrate the device for 50 milliseconds as feedback on box click
+        if (navigator.vibrate) {
+            navigator.vibrate(50); // You can adjust the duration as needed
+        }
+
         // Check if a color has been selected from kartPerformance
         if (selectedColor) {
             // Apply the selected color to the box
