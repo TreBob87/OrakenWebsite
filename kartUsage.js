@@ -57,3 +57,19 @@ function exportTeamCarUsage() {
     downloadCSV(teamCarUsageCSV, "teamCarUsage.csv");
 }
 
+function updateTimersDisplay() {
+    const timersContainer = document.getElementById('timersContainer');
+    timersContainer.innerHTML = ''; // Clear existing timer displays
+
+    for (const [carId, startTime] of Object.entries(carUsageStartTime)) {
+        const currentTime = new Date().getTime();
+        const duration = Math.floor((currentTime - startTime) / 1000); // Convert milliseconds to seconds
+
+        const timerDisplay = document.createElement('p');
+        timerDisplay.textContent = `Car ${carId}: ${duration} seconds on track`;
+        timersContainer.appendChild(timerDisplay);
+    }
+}
+
+// Call updateTimersDisplay at a set interval to refresh the timer displays
+setInterval(updateTimersDisplay, 1000); // Update every second

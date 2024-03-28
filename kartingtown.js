@@ -1,5 +1,5 @@
 window.onload = function() {
-    loadTeamCarUsage()
+    loadTeamkartUsage()
     // Load counts from localStorage or use default values
     const kartsOnTrackCount = parseInt(localStorage.getItem('kartsOnTrackCount'), 10) || 15;
     const kartsInPitCount = parseInt(localStorage.getItem('kartsInPitCount'), 10) || 3;
@@ -28,7 +28,7 @@ window.onload = function() {
 
 let selectedColor = '';
 let lastClickedBox = { track: null, pit: null };
-let teamCarUsage = {}; // Object to track car usage by teams
+let teamkartUsage = {}; // Object to track kart usage by teams
 
 
 function resetColors() {
@@ -53,9 +53,9 @@ function resetColors() {
             localStorage.removeItem(box.id); // Remove color from localStorage
         });
 
-        // Reset the teamCarUsage
-        teamCarUsage = {};
-        saveTeamCarUsage(); // Save the reset state to localStorage
+        // Reset the teamkartUsage
+        teamkartUsage = {};
+        saveTeamkartUsage(); // Save the reset state to localStorage
 
         // Remove existing boxes from the DOM
         document.getElementById('kartsOnTrack').innerHTML = '';
@@ -66,8 +66,8 @@ function resetColors() {
         createBoxes('kartsInPit', validKartsInPitCount, 'Lane ');
     }
 
-    // Optionally, refresh the display of car usage
-    displayCarUsage();
+    // Optionally, refresh the display of kart usage
+    displaykartUsage();
 }
 
 function handleBoxClick(event) {
@@ -82,12 +82,12 @@ function handleBoxClick(event) {
             event.target.style.backgroundColor = selectedColor;
             saveBoxColor(event.target); // Save the color change
 
-            // Update teamCarUsage with the new color
+            // Update teamkartUsage with the new color
             const teamNumber = event.target.textContent;
-            if (teamCarUsage[teamNumber]) {
+            if (teamkartUsage[teamNumber]) {
                 // Assuming the last entry should be updated with the new color
-                teamCarUsage[teamNumber][teamCarUsage[teamNumber].length - 1] = event.target.getAttribute('data-car-id') + " " + selectedColor;
-                saveTeamCarUsage(); // Save the updated team car usage
+                teamkartUsage[teamNumber][teamkartUsage[teamNumber].length - 1] = event.target.getAttribute('data-kart-id') + " " + selectedColor;
+                saveTeamkartUsage(); // Save the updated team kart usage
             }
 
             selectedColor = '';
@@ -114,45 +114,45 @@ function moveColors(selectedTrackBox) {
     const pitBoxes = document.querySelectorAll('#kartsInPit .box');
     if (pitBoxes.length === 0) return;
 
-    // Store the first pit box's color and car ID to cycle through
+    // Store the first pit box's color and kart ID to cycle through
     const firstPitBoxColor = pitBoxes[0].style.backgroundColor;
-    let firstPitBoxCarId = pitBoxes[0].getAttribute('data-car-id');
+    let firstPitBoxkartId = pitBoxes[0].getAttribute('data-kart-id');
 
     // Move colors and IDs through pit boxes
     for (let i = 0; i < pitBoxes.length - 1; i++) {
         pitBoxes[i].style.backgroundColor = pitBoxes[i + 1].style.backgroundColor;
-        pitBoxes[i].setAttribute('data-car-id', pitBoxes[i + 1].getAttribute('data-car-id'));
+        pitBoxes[i].setAttribute('data-kart-id', pitBoxes[i + 1].getAttribute('data-kart-id'));
         saveBoxColor(pitBoxes[i]);
     }
 
     // Update the last pit box with the selected track box's color and ID
     pitBoxes[pitBoxes.length - 1].style.backgroundColor = selectedTrackBox.style.backgroundColor;
-    pitBoxes[pitBoxes.length - 1].setAttribute('data-car-id', selectedTrackBox.getAttribute('data-car-id'));
+    pitBoxes[pitBoxes.length - 1].setAttribute('data-kart-id', selectedTrackBox.getAttribute('data-kart-id'));
     saveBoxColor(pitBoxes[pitBoxes.length - 1]);
 
     // Update the selected track box with the first pit box's color and stored ID
     selectedTrackBox.style.backgroundColor = firstPitBoxColor;
-    selectedTrackBox.setAttribute('data-car-id', firstPitBoxCarId);
+    selectedTrackBox.setAttribute('data-kart-id', firstPitBoxkartId);
     saveBoxColor(selectedTrackBox);
 
-    // Optionally update teamCarUsage to reflect the change
-    updateTeamCarUsageAfterMove(selectedTrackBox, pitBoxes);
+    // Optionally update teamkartUsage to reflect the change
+    updateTeamkartUsageAfterMove(selectedTrackBox, pitBoxes);
 }
 
-function updateTeamCarUsageAfterMove(selectedTrackBox) {
+function updateTeamkartUsageAfterMove(selectedTrackBox) {
     // Extract team number from the selected track box's content
     const teamNumber = selectedTrackBox.textContent;
 
     // Ensure there's an entry for this team number
-    if (!teamCarUsage[teamNumber]) {
-        teamCarUsage[teamNumber] = [];
+    if (!teamkartUsage[teamNumber]) {
+        teamkartUsage[teamNumber] = [];
     }
 
-    // Update teamCarUsage with the new car ID for this team
-    teamCarUsage[teamNumber].push(selectedTrackBox.getAttribute('data-car-id') + " " + selectedTrackBox.style.backgroundColor);
+    // Update teamkartUsage with the new kart ID for this team
+    teamkartUsage[teamNumber].push(selectedTrackBox.getAttribute('data-kart-id') + " " + selectedTrackBox.style.backgroundColor);
 
-    // Save the updated teamCarUsage
-    saveTeamCarUsage();
+    // Save the updated teamkartUsage
+    saveTeamkartUsage();
 }
 
 
@@ -189,7 +189,7 @@ function createBoxes(containerId, count) {
         // Adjust the startId for kartsInPit based on kartsOnTrack
         const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box');
         if (kartsOnTrack.length > 0) {
-            const lastKartOnTrackId = parseInt(kartsOnTrack[kartsOnTrack.length - 1].getAttribute('data-car-id'));
+            const lastKartOnTrackId = parseInt(kartsOnTrack[kartsOnTrack.length - 1].getAttribute('data-kart-id'));
             startId = lastKartOnTrackId;
         }
     }
@@ -197,16 +197,16 @@ function createBoxes(containerId, count) {
     for (let i = 1; i < count + 1; i++) {
         const box = document.createElement('div');
         box.classList.add('box');
-        const carId = startId + i;
-        box.id = `${containerId}-${carId}`;
-        box.setAttribute('data-car-id', carId.toString());
+        const kartId = startId + i;
+        box.id = `${containerId}-${kartId}`;
+        box.setAttribute('data-kart-id', kartId.toString());
         box.style.backgroundColor = 'grey';
 
         if (containerId === 'kartsOnTrack') {
             box.textContent = i;
-            // Initialize or update the team's initial car in teamCarUsage
-            if (!teamCarUsage[i]) {
-                teamCarUsage[i] = [carId.toString()];
+            // Initialize or update the team's initial kart in teamkartUsage
+            if (!teamkartUsage[i]) {
+                teamkartUsage[i] = [kartId.toString()];
             }
         } else {
             box.textContent = i;
@@ -225,8 +225,8 @@ function createBoxes(containerId, count) {
             }
         }
     }
-    // Save the updated team car usage after initialization or any change
-    saveTeamCarUsage();
+    // Save the updated team kart usage after initialization or any change
+    saveTeamkartUsage();
 }
 
 function loadBoxColors() {
@@ -242,27 +242,27 @@ function loadBoxColors() {
 function saveBoxColor(box) {
     localStorage.setItem(box.id, box.style.backgroundColor);
 }
-function saveTeamCarUsage() {
-    localStorage.setItem('teamCarUsage', JSON.stringify(teamCarUsage));
+function saveTeamkartUsage() {
+    localStorage.setItem('teamkartUsage', JSON.stringify(teamkartUsage));
 }
 
-function loadTeamCarUsage() {
-    const loadedData = localStorage.getItem('teamCarUsage');
+function loadTeamkartUsage() {
+    const loadedData = localStorage.getItem('teamkartUsage');
     if (loadedData) {
-        teamCarUsage = JSON.parse(loadedData);
+        teamkartUsage = JSON.parse(loadedData);
     } else {
-        teamCarUsage = {}; // Initialize if not present
+        teamkartUsage = {}; // Initialize if not present
     }
 }
 
 
 
-function displayCarUsage() {
-    const display = document.getElementById('carUsageDisplay');
-    let content = '<h3>Team Car Usage:</h3>';
+function displaykartUsage() {
+    const display = document.getElementById('kartUsageDisplay');
+    let content = '<h3>Team kart Usage:</h3>';
 
-    for (const [team, cars] of Object.entries(teamCarUsage)) {
-        content += `<p><strong>${team}:</strong> ${cars.join(', ')}</p>`;
+    for (const [team, karts] of Object.entries(teamkartUsage)) {
+        content += `<p><strong>${team}:</strong> ${karts.join(', ')}</p>`;
     }
 
     display.innerHTML = content;

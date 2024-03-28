@@ -1,3 +1,5 @@
+import { ref, set, get, remove } from '/firebase/database';
+
 window.onload = function() {
     loadTeamCarUsage();
     // Load counts from localStorage or use default values
@@ -69,19 +71,31 @@ function createBoxes(containerId, count) {
 
 
 
-function loadBoxColors() {
-    const boxes = document.querySelectorAll('.box');
-    boxes.forEach(box => {
-        const savedColor = localStorage.getItem(box.id);
-        if (savedColor) {
-            box.style.backgroundColor = savedColor;
+async function loadBoxColors() {
+    try {
+        const boxes = document.querySelectorAll('.box');
+        for (const box of boxes) {
+            const boxRef = ref(database, 'boxColors/' + box.id);
+            const snapshot = await get(boxRef);
+            if (snapshot.exists()) {
+                box.style.backgroundColor = snapshot.val();
+            }
         }
-    });
+    } catch (error) {
+        console.error('Failed to load box colors:', error);
+    }
 }
 
-function saveBoxColor(box) {
-    localStorage.setItem(box.id, box.style.backgroundColor);
+
+async function saveBoxColor(box) {
+    try {
+        const boxRef = ref(database, 'boxColors/' + box.id);
+        await set(boxRef, box.style.backgroundColor);
+    } catch (error) {
+        console.error('Failed to save box color:', error);
+    }
 }
+
 
 function createCustomCursor(color) {
     const cursorSize = 20; // Size of the cursor
@@ -213,59 +227,62 @@ function handleBoxClick(event) {
 
 
 
-function resetColors() {
+async function resetColors() {
     if (confirm('Are you sure you want to reset all colors and change the number of karts?')) {
-        // Ask and validate the new counts
-        const kartsOnTrackCount = parseInt(prompt("Enter the number of Karts-on-Track:", "45"), 10);
-        const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "5"), 10);
+        try {
+            const kartsOnTrackCount = parseInt(prompt("Enter the number of Karts-on-Track:", "45"), 10);
+            const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "5"), 10);
 
-        const validKartsOnTrackCount = isNaN(kartsOnTrackCount) ? 45 : kartsOnTrackCount;
-        const validKartsInPitCount = isNaN(kartsInPitCount) ? 5 : kartsInPitCount;
+            const validKartsOnTrackCount = isNaN(kartsOnTrackCount) ? 45 : kartsOnTrackCount;
+            const validKartsInPitCount = isNaN(kartsInPitCount) ? 5 : kartsInPitCount;
 
-        // Save these counts to localStorage
-        localStorage.setItem('kartsOnTrackCount', validKartsOnTrackCount);
-        localStorage.setItem('kartsInPitCount', validKartsInPitCount);
+            await set(ref(database, 'kartsOnTrackCount'), validKartsOnTrackCount);
+            await set(ref(database, 'kartsInPitCount'), validKartsInPitCount);
 
-        // Remove existing boxes and their colors from localStorage
-        const trackBoxes = document.querySelectorAll('#kartsOnTrack .box');
-        const pitBoxes = document.querySelectorAll('#kartsInPit .box');
-        const allBoxes = [...trackBoxes, ...pitBoxes];
+            await remove(ref(database, 'boxColors')); // Remove box colors from database
 
-        allBoxes.forEach(box => {
-            localStorage.removeItem(box.id); // Remove color from localStorage
-        });
+            teamCarUsage = {};
+            await saveTeamCarUsage(); // Save the reset state to Firebase
 
-        // Reset the teamCarUsage
-        teamCarUsage = {};
-        saveTeamCarUsage(); // Save the reset state to localStorage
+            document.getElementById('kartsOnTrack').innerHTML = '';
+            document.getElementById('kartsInPit').innerHTML = '';
 
-        // Remove existing boxes from the DOM
-        document.getElementById('kartsOnTrack').innerHTML = '';
-        document.getElementById('kartsInPit').innerHTML = '';
-
-        // Create new boxes with the specified numbers
-        createBoxes('kartsOnTrack', validKartsOnTrackCount);
-        createBoxes('kartsInPit', validKartsInPitCount);
-
-        // Optionally, refresh the display of car usage
-        displayCarUsage();
+            createBoxes('kartsOnTrack', validKartsOnTrackCount);
+            createBoxes('kartsInPit', validKartsInPitCount);
+        } catch (error) {
+            console.error('Failed to reset colors:', error);
+        }
     }
 }
 
 
-function saveTeamCarUsage() {
-    localStorage.setItem('teamCarUsage', JSON.stringify(teamCarUsage));
-}
 
-
-function loadTeamCarUsage() {
-    const loadedData = localStorage.getItem('teamCarUsage');
-    if (loadedData) {
-        teamCarUsage = JSON.parse(loadedData);
-    } else {
-        teamCarUsage = {}; // Initialize if not present
+async function loadTeamCarUsage() {
+    try {
+        const teamCarUsageRef = ref(database, 'teamCarUsage');
+        const snapshot = await get(teamCarUsageRef);
+        if (snapshot.exists()) {
+            teamCarUsage = snapshot.val();
+            console.log('Team Car Usage:', teamCarUsage);
+            displayCarUsage(); // Update UI with loaded data
+        } else {
+            console.log('No team car usage data available');
+            teamCarUsage = {};
+        }
+    } catch (error) {
+        console.error('Failed to load team car usage:', error);
     }
 }
+
+async function saveTeamCarUsage() {
+    try {
+        const teamCarUsageRef = ref(database, 'teamCarUsage');
+        await set(teamCarUsageRef, teamCarUsage);
+    } catch (error) {
+        console.error('Failed to save team car usage:', error);
+    }
+}
+
 
 
 
@@ -317,4 +334,3 @@ function swapColorsAndIds() {
         }
     }
 }
-
