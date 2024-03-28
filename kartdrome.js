@@ -126,7 +126,7 @@ async function saveBoxColor(box) {
     await set(boxRef, box.style.backgroundColor);
 }
 
-
+//added code
 function createCustomCursor(color) {
     const cursorSize = 20; // Size of the cursor
     const canvas = document.createElement('canvas');
