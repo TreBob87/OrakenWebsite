@@ -1,6 +1,6 @@
 // Import the Firebase modules you need
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
-import { getDatabase, ref, set, get, remove } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js';
+import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -19,13 +19,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-window.onload = function() {
-    loadTeamCarUsage();
-    // Load counts from localStorage or use default values
-    const kartsOnTrackCount = parseInt(localStorage.getItem('kartsOnTrackCount'), 10) || 45;
-    const kartsInPitCount = parseInt(localStorage.getItem('kartsInPitCount'), 10) || 5;
+async function loadKartCounts() {
+    const kartsOnTrackRef = ref(database, 'kartsOnTrackCount');
+    const kartsInPitRef = ref(database, 'kartsInPitCount');
 
-    // Use the loaded or default counts to create boxes
+    try {
+        const kartsOnTrackSnapshot = await get(kartsOnTrackRef);
+        const kartsInPitSnapshot = await get(kartsInPitRef);
+
+        const kartsOnTrackCount = kartsOnTrackSnapshot.val() || 45; // Default to 45 if not found
+        const kartsInPitCount = kartsInPitSnapshot.val() || 5; // Default to 5 if not found
+
+        return { kartsOnTrackCount, kartsInPitCount };
+    } catch (error) {
+        console.error('Error fetching kart counts from Firebase:', error);
+        return { kartsOnTrackCount: 45, kartsInPitCount: 5 };
+    }
+}
+
+window.onload = async function() {
+    loadTeamCarUsage();
+
+    // Load counts from Firebase database
+    const { kartsOnTrackCount, kartsInPitCount } = await loadKartCounts();
+
+    // Use the loaded counts to create boxes
     createBoxes('kartsOnTrack', kartsOnTrackCount);
     createBoxes('kartsInPit', kartsInPitCount);
     loadBoxColors();
@@ -36,17 +54,17 @@ window.onload = function() {
     document.getElementById('kartsInPit').addEventListener('click', handleBoxClick);
     document.getElementById('resetButton').addEventListener('click', resetColors);
 
-    // Add an event listener to the whole document to handle clicks outside boxes
     document.addEventListener('click', function(event) {
         if (!event.target.classList.contains('box')) {
-            // If the click is not on a box, remove highlighting from the currently highlighted box
             if (currentlyHighlighted) {
                 currentlyHighlighted.classList.remove('highlighted');
-                currentlyHighlighted = null; // Reset the reference to the currently highlighted box
+                currentlyHighlighted = null;
             }
         }
     }, true);
 };
+
+
 
 let selectedColor = '';
 let lastClickedBox = { track: null, pit: null };
@@ -91,28 +109,21 @@ function createBoxes(containerId, count) {
 
 
 async function loadBoxColors() {
-    try {
-        const boxes = document.querySelectorAll('.box');
-        for (const box of boxes) {
-            const boxRef = ref(database, 'boxColors/' + box.id);
-            const snapshot = await get(boxRef);
+    const boxes = document.querySelectorAll('.box');
+    boxes.forEach(box => {
+        const boxRef = ref(database, 'boxColors/' + box.id);
+        onValue(boxRef, (snapshot) => {
             if (snapshot.exists()) {
                 box.style.backgroundColor = snapshot.val();
             }
-        }
-    } catch (error) {
-        console.error('Failed to load box colors:', error);
-    }
+        });
+    });
 }
 
 
 async function saveBoxColor(box) {
-    try {
-        const boxRef = ref(database, 'boxColors/' + box.id);
-        await set(boxRef, box.style.backgroundColor);
-    } catch (error) {
-        console.error('Failed to save box color:', error);
-    }
+    const boxRef = ref(database, 'boxColors/' + box.id);
+    await set(boxRef, box.style.backgroundColor);
 }
 
 
