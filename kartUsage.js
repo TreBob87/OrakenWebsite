@@ -1,3 +1,23 @@
+// Import the Firebase modules you need
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
+import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js';
+
+// Firebase configuration
+const firebaseConfig = {
+    // ...
+    // The value of `databaseURL` depends on the location of the database
+    apiKey: "AIzaSyDg54uaZXT-xLEVFIfqmsLtxt0T_424KIQ",
+    authDomain: "oraken-kart-counter.firebaseapp.com",
+    projectId: "oraken-kart-counter",
+    storageBucket: "oraken-kart-counter.appspot.com",
+    messagingSenderId: "670891246010",
+    appId: "1:670891246010:web:ce13d39cb484cf34efdd83",
+    databaseURL: "https://oraken-kart-counter-default-rtdb.europe-west1.firebasedatabase.app/",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 // Call displayTeamCarUsage on page load
 window.onload = function()
 {
@@ -5,7 +25,7 @@ window.onload = function()
 }
 function displayTeamCarUsage() {
     const display = document.getElementById('carUsageDisplay');
-    const loadedData = localStorage.getItem('teamCarUsage');
+    const loadedData = ref(database, 'teamCarUsage');
     if (loadedData) {
         const teamCarUsage = JSON.parse(loadedData);
         let content = '<ul>';
@@ -57,19 +77,6 @@ function exportTeamCarUsage() {
     downloadCSV(teamCarUsageCSV, "teamCarUsage.csv");
 }
 
-function updateTimersDisplay() {
-    const timersContainer = document.getElementById('timersContainer');
-    timersContainer.innerHTML = ''; // Clear existing timer displays
-
-    for (const [carId, startTime] of Object.entries(carUsageStartTime)) {
-        const currentTime = new Date().getTime();
-        const duration = Math.floor((currentTime - startTime) / 1000); // Convert milliseconds to seconds
-
-        const timerDisplay = document.createElement('p');
-        timerDisplay.textContent = `Car ${carId}: ${duration} seconds on track`;
-        timersContainer.appendChild(timerDisplay);
-    }
-}
 
 // Call updateTimersDisplay at a set interval to refresh the timer displays
 setInterval(updateTimersDisplay, 1000); // Update every second
