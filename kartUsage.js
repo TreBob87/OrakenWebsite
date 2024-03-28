@@ -23,21 +23,26 @@ window.onload = function()
 {
     displayTeamCarUsage()
 }
-function displayTeamCarUsage() {
-    const display = document.getElementById('carUsageDisplay');
-    const loadedData = ref(database, 'teamCarUsage');
-    if (loadedData) {
-        const teamCarUsage = JSON.parse(loadedData);
-        let content = '<ul>';
-        for (const [team, cars] of Object.entries(teamCarUsage)) {
-            content += `<li><strong>${team}:</strong> ${cars.join(', ')}</li>`;
+async function displayTeamCarUsage() {
+    const dbRef = ref(database, 'teamCarUsage');
+    try {
+        const snapshot = await get(dbRef);
+        if (snapshot.exists()) {
+            const teamCarUsage = snapshot.val();  // Gets the actual data from Firebase
+            let content = '<ul>';
+            for (const [team, cars] of Object.entries(teamCarUsage)) {
+                content += `<li><strong>${team}:</strong> ${cars.join(', ')}</li>`;
+            }
+            content += '</ul>';
+            document.getElementById('carUsageDisplay').innerHTML = content;
+        } else {
+            document.getElementById('carUsageDisplay').innerHTML = '<p>No car usage data available.</p>';
         }
-        content += '</ul>';
-        display.innerHTML = content;
-    } else {
-        display.innerHTML = '<p>No car usage data available.</p>';
+    } catch (error) {
+        console.error('Failed to load team car usage:', error);
     }
 }
+
 
 
 
@@ -77,6 +82,3 @@ function exportTeamCarUsage() {
     downloadCSV(teamCarUsageCSV, "teamCarUsage.csv");
 }
 
-
-// Call updateTimersDisplay at a set interval to refresh the timer displays
-setInterval(updateTimersDisplay, 1000); // Update every second
