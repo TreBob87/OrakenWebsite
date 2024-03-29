@@ -15,7 +15,19 @@ body {
 }
 
 .section {
+    display: flex; /* Use flexbox to arrange items */
+    justify-content: center; /* Center flex items horizontally */
+    flex-wrap: wrap; /* Allow items to wrap as needed */
     margin-bottom: 20px;
+}
+
+.sectionPit {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    /* Calculates 50% of the element's width, and moves it by that */
+    /* amount across the X-axis to the left */
+    transform: translateX(-50%);
 }
 
 .box {

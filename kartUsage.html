@@ -33,5 +33,41 @@
 
 
 <script type="module" src="kartUsage.js"></script>
+<script>
+    function exportTeamCarUsage() {
+    const loadedData = localStorage.getItem('teamCarUsage');
+    if (!loadedData) {
+        console.error('No teamCarUsage data available.');
+        return;
+    }
+    const teamCarUsage = JSON.parse(loadedData);
+    const teamCarUsageCSV = convertTeamCarUsageToCSV(teamCarUsage);
+    downloadCSV(teamCarUsageCSV, "teamCarUsage.csv");
+}
+    function convertTeamCarUsageToCSV(teamCarUsage) {
+        let csvContent = "Car ID,Colors\n"; // Start with the header
+
+        // Build CSV content
+        Object.entries(teamCarUsage).forEach(([carId, colors]) => {
+            let colorString = colors.join(';');
+            csvContent += `${carId},${colorString}\n`;
+        });
+
+        // Convert to Blob
+        return new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    }
+
+    function downloadCSV(csvBlob, fileName) {
+        // Create an object URL for the blob
+        let url = URL.createObjectURL(csvBlob);
+        let link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url); // Clean up
+    }
+</script>
 </body>
 </html>

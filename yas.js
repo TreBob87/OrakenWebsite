@@ -1,17 +1,58 @@
-window.onload = function() {
-    // Load counts from localStorage or use default values
-    const kartsOnTrackCount = parseInt(localStorage.getItem('kartsOnTrackCount'), 10) || 15;
-    const kartsInPitCount = parseInt(localStorage.getItem('kartsInPitCount'), 10) || 4;
+// Import the Firebase modules you need
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
+import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js';
+
+// Firebase configuration
+const firebaseConfig = {
+    // ...
+    // The value of `databaseURL` depends on the location of the database
+    apiKey: "AIzaSyDg54uaZXT-xLEVFIfqmsLtxt0T_424KIQ",
+    authDomain: "oraken-kart-counter.firebaseapp.com",
+    projectId: "oraken-kart-counter",
+    storageBucket: "oraken-kart-counter.appspot.com",
+    messagingSenderId: "670891246010",
+    appId: "1:670891246010:web:ce13d39cb484cf34efdd83",
+    databaseURL: "https://oraken-kart-counter-default-rtdb.europe-west1.firebasedatabase.app/",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+let teamCarUsage = {}; // Object to track car usage by teams
+async function loadKartCounts() {
+    const kartsOnTrackRef = ref(database, 'kartsOnTrackCountYas');
+    const kartsInPitRef = ref(database, 'kartsInPitCountYas');
+
+    try {
+        const kartsOnTrackYasSnapshot = await get(kartsOnTrackRef);
+        const kartsInPitYasSnapshot = await get(kartsInPitRef);
+
+        const kartsOnTrackCountYas = kartsOnTrackYasSnapshot.val() || 45; // Default to 45 if not found
+        const kartsInPitCountYas = kartsInPitYasSnapshot.val() || 5; // Default to 5 if not found
+
+        return { kartsOnTrackCountYas, kartsInPitCountYas };
+    } catch (error) {
+        console.error('Error fetching kart counts from Firebase:', error);
+        return { kartsOnTrackCountYas: 45, kartsInPitCountYas: 5 };
+    }
+}
+
+window.onload = async function() {
+
+    loadTeamCarUsage();
+
+    // Load counts from Firebase database
+    const { kartsOnTrackCountYas, kartsInPitCountYas } = await loadKartCounts();
 
     // Use the loaded or default counts to create boxes
-    createBoxes('kartsOnTrack', kartsOnTrackCount, 'Kart ');
-    createBoxes('kartsInPit', kartsInPitCount, 'Lane ');
+    createBoxes('kartsOnTrackYas', kartsOnTrackCountYas, 'Kart ');
+    createBoxes('kartsInPitYas', kartsInPitCountYas, 'Lane ');
     loadBoxColors();
 
     // Add event listeners
     document.getElementById('kartPerformance').addEventListener('click', pickColor);
-    document.getElementById('kartsOnTrack').addEventListener('click', handleBoxClick);
-    document.getElementById('kartsInPit').addEventListener('click', handleBoxClick);
+    document.getElementById('kartsOnTrackYas').addEventListener('click', handleBoxClick);
+    document.getElementById('kartsInPitYas').addEventListener('click', handleBoxClick);
     document.getElementById('resetButton').addEventListener('click', resetColors);
 };
 
@@ -20,51 +61,56 @@ let lastClickedBox = { track: null, pit: null };
 
 function createBoxes(containerId, count, labelPrefix) {
     const container = document.getElementById(containerId);
+    container.innerHTML = '';  // Clear existing boxes
+
     for (let i = 1; i <= count; i++) {
         const box = document.createElement('div');
         box.classList.add('box');
-        box.id = `${containerId}-${i}`;  // Unique ID for each box
-        box.style.backgroundColor = 'grey';
-        if (labelPrefix === 'Kart ') {
-            box.textContent = i;
-        }
-        else {
-            if (labelPrefix === 'Lane ') {
-                if (i % 2 !== 0) {
-                    box.textContent = labelPrefix + 1;
-                }
-                else {
-                    box.textContent = labelPrefix + 2;
-                }
-            }
+        box.id = `${containerId}-${i}`;
+        box.style.backgroundColor = 'grey';  // Reset color
 
+        // Assigning the unique identifier
+        box.setAttribute('data-car-id', `${labelPrefix}-car-${i}`);
+
+        if (containerId.includes('kartsInPitYas')) {
+            // Labeling lanes as 1 or 2 instead of 3 or 4
+            const laneNumber = (i % 2 === 0) ? 2 : 1;
+            box.textContent = `${labelPrefix} ${laneNumber}`;
+        } else {
+            box.textContent = `${i}`;  // Set box label for karts on track
+            if (!teamCarUsage[i]) {
+                teamCarUsage[i] = [`${labelPrefix}-car-${i}`];
+            }
         }
+
         container.appendChild(box);
 
-        if(containerId === 'kartsInPit') {
-            if (i % 2 === 0) {
-                container.appendChild(document.createElement('br'));
-            }
-        } else {
-            if (i % 5 === 0) {
-                container.appendChild(document.createElement('br'));
-            }
+        if (containerId.includes('kartsInPitYas') && i % 2 === 0) {
+            container.appendChild(document.createElement('br'));
+        } else if (!containerId.includes('kartsInPitYas') && i % 5 === 0) {
+            container.appendChild(document.createElement('br'));
         }
     }
+    saveTeamCarUsage()
 }
 
-function loadBoxColors() {
+
+
+async function loadBoxColors() {
     const boxes = document.querySelectorAll('.box');
     boxes.forEach(box => {
-        const savedColor = localStorage.getItem(box.id);
-        if (savedColor) {
-            box.style.backgroundColor = savedColor;
-        }
+        const boxRefYas = ref(database, 'boxColorsYas/' + box.id);
+        onValue(boxRefYas, (snapshot) => {
+            if (snapshot.exists()) {
+                box.style.backgroundColor = snapshot.val();
+            }
+        });
     });
 }
 
-function saveBoxColor(box) {
-    localStorage.setItem(box.id, box.style.backgroundColor);
+async function saveBoxColor(box) {
+    const boxRefYas = ref(database, 'boxColorsYas/' + box.id);
+    await set(boxRefYas, box.style.backgroundColor);
 }
 
 function createCustomCursor(color) {
@@ -101,7 +147,7 @@ function handleBoxClick(event) {
         }
 
         // Apply selected color from kartPerformance
-        if (selectedColor !== '' && (parentID === 'kartsOnTrack' || parentID.includes('kartsInPit'))) {
+        if (selectedColor !== '' && (parentID === 'kartsOnTrackYas' || parentID.includes('kartsInPitYas'))) {
             box.style.backgroundColor = selectedColor;
             saveBoxColor(box);
             selectedColor = '';
@@ -112,12 +158,12 @@ function handleBoxClick(event) {
         }
 
         // Capture selections from kartsOnTrack
-        if (parentID === 'kartsOnTrack') {
+        if (parentID === 'kartsOnTrackYas') {
             lastClickedBox.track = box; // Always record the latest kartsOnTrack selection
         }
 
         // Capture selections from kartsInPit
-        else if (parentID.includes('kartsInPit')) {
+        else if (parentID.includes('kartsInPitYas')) {
             lastClickedBox.pit = box; // Always record the latest kartsInPit selection
         }
 
@@ -131,51 +177,74 @@ function handleBoxClick(event) {
     }
 }
 
+async function saveTeamCarUsage() {
+    try {
+        const teamCarUsageRef = ref(database, 'teamCarUsageYas'); // Use 'teamCarUsageYas' as the reference
+        await set(teamCarUsageRef, teamCarUsage);
+    } catch (error) {
+        console.error('Failed to save team car usage:', error);
+    }
+}
+
+
+async function loadTeamCarUsage() {
+    try {
+        const teamCarUsageRef = ref(database, 'teamCarUsageYas'); // Use 'teamCarUsageYas' as the reference
+        const snapshot = await get(teamCarUsageRef);
+        if (snapshot.exists()) {
+            teamCarUsage = snapshot.val();
+            // Optionally display the loaded data
+            // displayCarUsage();
+        } else {
+            teamCarUsage = {};
+        }
+    } catch (error) {
+        console.error('Failed to load team car usage:', error);
+    }
+}
 
 
 function swapColors() {
-    // Ensure both a track and pit box have been clicked
     if (lastClickedBox.track && lastClickedBox.pit) {
         const trackBox = lastClickedBox.track;
         const pitBox = lastClickedBox.pit;
 
-        // Define the kartInPit variables at the top to ensure they are in scope
-        const kartInPit1 = document.getElementById('kartsInPit-1');
-        const kartInPit2 = document.getElementById('kartsInPit-2');
-        const kartInPit3 = document.getElementById('kartsInPit-3');
-        const kartInPit4 = document.getElementById('kartsInPit-4');
-
-        // Use temporary variables for color swapping to avoid reference errors
-        let tempColor;
-
-        // Check for specific kartsInPit conditions and ensure elements are defined before accessing
-        if (pitBox.id === 'kartsInPit-1' || pitBox.id === 'kartsInPit-3') {
-            // Ensure kartInPit1 and kartInPit3 are not null before attempting to access
-            if (kartInPit1 && kartInPit3) {
-                tempColor = trackBox.style.backgroundColor;
-                trackBox.style.backgroundColor = kartInPit1.style.backgroundColor;
-                kartInPit1.style.backgroundColor = kartInPit3.style.backgroundColor;
-                kartInPit3.style.backgroundColor = tempColor;
-            }
-        } else if (pitBox.id === 'kartsInPit-2' || pitBox.id === 'kartsInPit-4') {
-            // Ensure kartInPit2 and kartInPit4 are not null before attempting to access
-            if (kartInPit2 && kartInPit4) {
-                tempColor = trackBox.style.backgroundColor;
-                trackBox.style.backgroundColor = kartInPit2.style.backgroundColor;
-                kartInPit2.style.backgroundColor = kartInPit4.style.backgroundColor;
-                kartInPit4.style.backgroundColor = tempColor;
-            }
+        // Determine the pit boxes to be swapped based on the clicked pit box
+        let pitBoxToSwapWith, otherPitBox;
+        if (pitBox.id.endsWith('-1') || pitBox.id.endsWith('-3')) {
+            pitBoxToSwapWith = document.getElementById('kartsInPitYas-1');
+            otherPitBox = document.getElementById('kartsInPitYas-3');
+        } else if (pitBox.id.endsWith('-2') || pitBox.id.endsWith('-4')) {
+            pitBoxToSwapWith = document.getElementById('kartsInPitYas-2');
+            otherPitBox = document.getElementById('kartsInPitYas-4');
         }
 
-        // Save the new colors
-        saveBoxColor(trackBox);
-        // Only attempt to save colors for non-null elements
-        if (kartInPit1) saveBoxColor(kartInPit1);
-        if (kartInPit2) saveBoxColor(kartInPit2);
-        if (kartInPit3) saveBoxColor(kartInPit3);
-        if (kartInPit4) saveBoxColor(kartInPit4);
+        if (pitBoxToSwapWith && otherPitBox) {
+            // Swap the colors and data-car-id attributes
+            let tempColor = trackBox.style.backgroundColor;
+            let tempId = trackBox.getAttribute('data-car-id');
 
-        // Reset last clicked boxes
+            trackBox.style.backgroundColor = pitBoxToSwapWith.style.backgroundColor;
+            trackBox.setAttribute('data-car-id', pitBoxToSwapWith.getAttribute('data-car-id'));
+
+            pitBoxToSwapWith.style.backgroundColor = otherPitBox.style.backgroundColor;
+            pitBoxToSwapWith.setAttribute('data-car-id', otherPitBox.getAttribute('data-car-id'));
+
+            otherPitBox.style.backgroundColor = tempColor;
+            otherPitBox.setAttribute('data-car-id', tempId);
+
+            // Force the browser to repaint the updated elements
+            trackBox.offsetHeight;
+            pitBoxToSwapWith.offsetHeight;
+            otherPitBox.offsetHeight;
+
+            // Save the updated colors to the database
+            saveBoxColor(trackBox);
+            saveBoxColor(pitBoxToSwapWith);
+            saveBoxColor(otherPitBox);
+            saveTeamCarUsage()
+        }
+
         lastClickedBox.track = null;
         lastClickedBox.pit = null;
     }
@@ -183,34 +252,31 @@ function swapColors() {
 
 
 
-function resetColors() {
+
+async function resetColors() {
     if (confirm('Are you sure you want to reset all colors and change the number of karts?')) {
-        // Ask and validate the new counts
-        const kartsOnTrackCount = parseInt(prompt("Enter the number of Karts-on-Track:", "15"), 10);
-        const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "4"), 10);
+        try {
+            const kartsOnTrackCountYas = parseInt(prompt("Enter the number of Karts-on-Track:", "10"), 10);
+            const kartsInPitCountYas = parseInt(prompt("Enter the number of Karts-in-Pit:", "4"), 2);
 
-        const validKartsOnTrackCount = isNaN(kartsOnTrackCount) ? 15 : kartsOnTrackCount;
-        const validKartsInPitCount = isNaN(kartsInPitCount) ? 4 : kartsInPitCount;
+            const validKartsOnTrackCountYas = isNaN(kartsOnTrackCountYas) ? 10 : kartsOnTrackCountYas;
+            const validKartsInPitCountYas = isNaN(kartsInPitCountYas) ? 4 : kartsInPitCountYas;
 
-        // Save these counts to localStorage
-        localStorage.setItem('kartsOnTrackCount', validKartsOnTrackCount);
-        localStorage.setItem('kartsInPitCount', validKartsInPitCount);
+            await set(ref(database, 'kartsOnTrackCountYas'), validKartsOnTrackCountYas);
+            await set(ref(database, 'kartsInPitCountYas'), validKartsInPitCountYas);
 
-        // Remove existing boxes and their colors from localStorage
-        const trackBoxes = document.querySelectorAll('#kartsOnTrack .box');
-        const pitBoxes = document.querySelectorAll('#kartsInPit .box');
-        const allBoxes = [...trackBoxes, ...pitBoxes];
+            await remove(ref(database, 'boxColorsYas')); // Remove box colors from database
 
-        allBoxes.forEach(box => {
-            localStorage.removeItem(box.id); // Remove color from localStorage
-        });
+            teamCarUsage = {};
+            await saveTeamCarUsage(); // Save the reset state to Firebase
 
-        // Remove existing boxes from the DOM
-        document.getElementById('kartsOnTrack').innerHTML = '';
-        document.getElementById('kartsInPit').innerHTML = '';
+            document.getElementById('kartsOnTrackYas').innerHTML = '';
+            document.getElementById('kartsInPitYas').innerHTML = '';
 
-        // Create new boxes with the specified numbers
-        createBoxes('kartsOnTrack', validKartsOnTrackCount, 'Kart ');
-        createBoxes('kartsInPit', validKartsInPitCount, 'Lane ');
+            createBoxes('kartsOnTrackYas', validKartsOnTrackCountYas, 'Kart ');
+            createBoxes('kartsInPitYas', validKartsInPitCountYas, 'Lane ');
+        } catch (error) {
+            console.error('Failed to reset colors:', error);
+        }
     }
 }
