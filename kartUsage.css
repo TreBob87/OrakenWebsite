@@ -2,7 +2,7 @@
 
 body {
     font-family: "Poppins", sans-serif;
-    background-image: url("Pictures/Kartdrome.jpg");
+    background-color: #2ABFAB;
     background-size: 100%;
     box-sizing: border-box;
     background-position: center;
@@ -17,6 +17,9 @@ body {
 }
 
 .section {
+    display: flex; /* Use flexbox to arrange items */
+    justify-content: center; /* Center flex items horizontally */
+    flex-wrap: wrap; /* Allow items to wrap as needed */
     margin-bottom: 20px;
 }
 

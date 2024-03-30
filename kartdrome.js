@@ -313,19 +313,6 @@ async function saveTeamCarUsage() {
     }
 }
 
-
-
-
-function displayCarUsage() {
-    const display = document.getElementById('carUsageDisplay');
-    let content = '<h3>Team Car Usage:</h3>';
-
-    for (const [team, cars] of Object.entries(teamCarUsage)) {
-        content += `<p><strong>${team}:</strong> ${cars.join(', ')}</p>`;
-    }
-
-    display.innerHTML = content;
-}
 function swapColorsAndIds() {
     // Ensure that a box is highlighted before allowing a swap
     if (currentlyHighlighted && (lastClickedBox.track && lastClickedBox.pit)) {
