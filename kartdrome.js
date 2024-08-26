@@ -1,6 +1,7 @@
 // Import the Firebase modules you need
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
-import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js';
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getDatabase, ref, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -38,7 +39,7 @@ async function loadKartCounts() {
 }
 
 window.onload = async function() {
-    loadTeamCarUsage();
+    await loadTeamCarUsage();
 
     // Load counts from Firebase database
     const { kartsOnTrackCount, kartsInPitCount } = await loadKartCounts();
@@ -46,7 +47,7 @@ window.onload = async function() {
     // Use the loaded counts to create boxes
     createBoxes('kartsOnTrack', kartsOnTrackCount);
     createBoxes('kartsInPit', kartsInPitCount);
-    loadBoxColors();
+    await loadBoxColors();
 
     // Add event listeners
     document.getElementById('kartPerformance').addEventListener('click', pickColor);
@@ -60,6 +61,8 @@ window.onload = async function() {
                 currentlyHighlighted.classList.remove('highlighted');
                 currentlyHighlighted = null;
             }
+            lastClickedBox.track = null;
+            lastClickedBox.pit = null;
         }
     }, true);
 };
@@ -155,10 +158,6 @@ function pickColor(event) {
 
 function handleBoxClick(event) {
     // Check if the click is within the kartPerformance section
-    if (event.currentTarget.id === 'kartPerformance') {
-        // Do nothing if the click is within the kartPerformance section
-        return;
-    }
 
     if (event.target.classList.contains('box')) {
         const box = event.target;
@@ -172,7 +171,9 @@ function handleBoxClick(event) {
         if (currentlyHighlighted === box) {
             box.classList.remove('highlighted');
             currentlyHighlighted = null; // Deselect the box
-            return; // Exit the function to prevent further action
+            lastClickedBox.track = null;
+            lastClickedBox.pit = null;
+            return; // Exit early since the same box was clicked
         }
 
         // Remove highlighting from any previously selected box
@@ -181,10 +182,9 @@ function handleBoxClick(event) {
         }
 
         // Highlight the newly clicked box
-        if (currentlyHighlighted === null) {
+        if (currentlyHighlighted === null || currentlyHighlighted !== box) {
             box.classList.add('highlighted');
             currentlyHighlighted = box; // Update the currently highlighted box
-
         }
 
         // Check if a color has been selected from kartPerformance
@@ -237,8 +237,6 @@ function handleBoxClick(event) {
         }
 
         if (lastClickedBox.track && lastClickedBox.pit) {
-            console.log(lastClickedBox)
-
             swapColorsAndIds();
             // Reset selections to require new clicks before another swap
             lastClickedBox.track = null;
@@ -249,7 +247,11 @@ function handleBoxClick(event) {
             }
         }
     } else {
-        // If the click is not on a box, clear the last clicked boxes
+        // If the click is not on a box, clear the last clicked boxes and any highlights
+        if (currentlyHighlighted) {
+            currentlyHighlighted.classList.remove('highlighted');
+            currentlyHighlighted = null;
+        }
         lastClickedBox.track = null;
         lastClickedBox.pit = null;
     }
