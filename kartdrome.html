@@ -22,6 +22,14 @@
     <a href="kartUsage.html">Karts used</a>
 
 </nav>
+<div class="qualiMode">
+    <h2>Quali Mode</h2>
+<label class="switch" id="qualiMode">
+    <input class="switch-input" type="checkbox"/>
+    <span class="switch-label" data-on="On" data-off="Off"></span>
+    <span class="switch-handle"></span>
+</label>
+</div>
 <div class="container">
     <h2>Karts on Track</h2>
     <div id="kartsOnTrack" class="section">
@@ -46,6 +54,17 @@
 <div class="raceReset">
     <button id="resetButton">Click here to Reset</button>
 </div>
+<button id="replaceKartButton">Replace Kart</button>
+
+<!-- Popup Container -->
+<div id="replaceKartPopup" class="popup" style="display: none;">
+    <h3>Select a Kart to Replace</h3>
+    <div id="kartSelectionContainer">
+        <!-- Kart selection will be populated dynamically -->
+    </div>
+    <button id="confirmReplacementButton">Confirm Replacement</button>
+</div>
+
 <script type="module" src="kartdrome.js"></script>
 </body>
 </html>

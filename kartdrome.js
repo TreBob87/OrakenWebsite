@@ -67,11 +67,17 @@ window.onload = async function() {
     }, true);
 };
 
-
-
+let selectedKartBox = null;
+let replacementIdCounter = 70;
+let checked;
 let selectedColor = '';
 let lastClickedBox = { track: null, pit: null };
 let teamCarUsage = {}; // Object to track car usage by teams
+
+const replaceKartButton = document.getElementById('replaceKartButton');
+const replaceKartPopup = document.getElementById('replaceKartPopup');
+const kartSelectionContainer = document.getElementById('kartSelectionContainer');
+const confirmReplacementButton = document.getElementById('confirmReplacementButton');
 
 function createBoxes(containerId, count) {
     const container = document.getElementById(containerId);
@@ -80,8 +86,7 @@ function createBoxes(containerId, count) {
         // Adjust the startId for kartsInPit based on kartsOnTrack
         const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box');
         if (kartsOnTrack.length > 0) {
-            const lastKartOnTrackId = parseInt(kartsOnTrack[kartsOnTrack.length - 1].getAttribute('data-car-id'));
-            startId = lastKartOnTrackId;
+            startId = parseInt(kartsOnTrack[kartsOnTrack.length - 1].getAttribute('data-car-id'));
         }
     }
 
@@ -209,13 +214,18 @@ function handleBoxClick(event) {
             box.style.backgroundColor = selectedColor;
             saveBoxColor(box); // Save the color change
 
-            // Update teamCarUsage with the new color
-            const teamNumber = event.target.textContent;
-            if (teamCarUsage[teamNumber]) {
-                // Assuming the last entry should be updated with the new color
-                teamCarUsage[teamNumber][teamCarUsage[teamNumber].length - 1] = event.target.getAttribute('data-car-id') + " " + selectedColor;
-                saveTeamCarUsage(); // Save the updated team car usage
+            if (!checked) {
+                // Update teamCarUsage with the new color
+                const teamNumber = event.target.textContent;
+                if (teamCarUsage[teamNumber]) {
+                    // Assuming the last entry should be updated with the new color
+                    teamCarUsage[teamNumber][teamCarUsage[teamNumber].length - 1] = event.target.getAttribute('data-car-id') + " " + selectedColor;
+                    if (!checked) {
+                        saveTeamCarUsage(); // Save the updated team car usage
+                    }
+                }
             }
+
 
             selectedColor = '';
             document.body.style.cursor = 'default'; // Reset cursor to default
@@ -281,6 +291,7 @@ async function resetColors() {
 
             createBoxes('kartsOnTrack', validKartsOnTrackCount);
             createBoxes('kartsInPit', validKartsInPitCount);
+            replacementIdCounter = 70
         } catch (error) {
             console.error('Failed to reset colors:', error);
         }
@@ -296,7 +307,6 @@ async function loadTeamCarUsage() {
         if (snapshot.exists()) {
             teamCarUsage = snapshot.val();
             console.log('Team Car Usage:', teamCarUsage);
-            displayCarUsage(); // Update UI with loaded data
         } else {
             console.log('No team car usage data available');
             teamCarUsage = {};
@@ -328,17 +338,20 @@ function swapColorsAndIds() {
             trackBox.style.backgroundColor = pitBox.style.backgroundColor;
             pitBox.style.backgroundColor = tempColor;
 
-            let tempId = trackBox.getAttribute('data-car-id');
-            trackBox.setAttribute('data-car-id', pitBox.getAttribute('data-car-id'));
-            pitBox.setAttribute('data-car-id', tempId);
+            if (!checked) {
+                let tempId = trackBox.getAttribute('data-car-id');
+                trackBox.setAttribute('data-car-id', pitBox.getAttribute('data-car-id'));
+                pitBox.setAttribute('data-car-id', tempId);
 
-            // Update the teamCarUsage to reflect the swap
-            // Assuming teamCarUsage needs to be updated based on the swap logic provided
-            const teamNumber = trackBox.textContent; // Adjusted for generic use
-            if (!teamCarUsage[teamNumber]) {
-                teamCarUsage[teamNumber] = [];
+                // Update the teamsKarUsage to reflect the swap
+                // Assuming teamCarUsage needs to be updated based on the swap logic provided
+
+                const teamNumber = trackBox.textContent; // Adjusted for generic use
+                if (!teamCarUsage[teamNumber]) {
+                    teamCarUsage[teamNumber] = [];
+                }
+                teamCarUsage[teamNumber].push(trackBox.getAttribute('data-car-id') + " " + trackBox.style.backgroundColor);
             }
-            teamCarUsage[teamNumber].push(trackBox.getAttribute('data-car-id') + " " + trackBox.style.backgroundColor);
 
             // Save changes
             saveBoxColor(trackBox);
@@ -353,3 +366,101 @@ function swapColorsAndIds() {
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const qualiModeCheckbox = document.querySelector('#qualiMode .switch-input');
+
+    // Add an event listener for when the checkbox state changes
+    qualiModeCheckbox.addEventListener('change', function () {
+        if (qualiModeCheckbox.checked) {
+            console.log('Quali Mode is ON');
+            checked = true;
+        } else {
+            console.log('Quali Mode is OFF');
+            checked = false;
+            const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box')
+            kartsOnTrack.forEach((kart) => teamCarUsage[kart.textContent][teamCarUsage[kart.getAttribute('data-car-id')].length - 1] = kart.getAttribute('data-car-id') + " " + kart.style.backgroundColor);
+            saveTeamCarUsage()
+        }
+    });
+});
+
+replaceKartButton.addEventListener('click', function () {
+    // Populate the popup with the current karts
+    kartSelectionContainer.innerHTML = ''; // Clear previous options
+    const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box');
+    const kartsInPit = document.querySelectorAll('#kartsInPit .box');
+
+    kartsOnTrack.forEach(kart => {
+        const kartOption = document.createElement('div');
+        kartOption.classList.add('kart-option');
+        kartOption.textContent = `Track: Kart ${kart.textContent} (ID: ${kart.getAttribute('data-car-id')})`;
+        kartOption.dataset.carId = kart.getAttribute('data-car-id');
+        kartOption.addEventListener('click', function () {
+            // Highlight the selected kart
+            if (selectedKartBox) {
+                selectedKartBox.classList.remove('selected');
+            }
+            selectedKartBox = kart;
+            document.querySelectorAll('.kart-option').forEach(option => {
+                option.classList.remove('highlighted'); // Remove highlight from all options
+            });
+            kartOption.classList.add('highlighted'); // Highlight the selected option
+        });
+        kartSelectionContainer.appendChild(kartOption);
+    });
+
+    kartsInPit.forEach(kart => {
+        const kartOption = document.createElement('div');
+        kartOption.classList.add('kart-option');
+        kartOption.textContent = `Pitlane: Kart ${kart.textContent} (ID: ${kart.getAttribute('data-car-id')})`;
+        kartOption.dataset.carId = kart.getAttribute('data-car-id');
+        kartOption.addEventListener('click', function () {
+            // Highlight the selected kart
+            if (selectedKartBox) {
+                selectedKartBox.classList.remove('selected');
+            }
+            selectedKartBox = kart;
+            document.querySelectorAll('.kart-option').forEach(option => {
+                option.classList.remove('highlighted'); // Remove highlight from all options
+            });
+            kartOption.classList.add('highlighted'); // Highlight the selected option
+        });
+        kartSelectionContainer.appendChild(kartOption);
+    });
+
+    // Show the popup
+    replaceKartPopup.style.display = 'block';
+});
+
+confirmReplacementButton.addEventListener('click', function () {
+    if (selectedKartBox) {
+        // Replace the kart's data-car-id
+        selectedKartBox.setAttribute('data-car-id', replacementIdCounter.toString());
+        selectedKartBox.style.backgroundColor = 'grey'
+        replacementIdCounter++;
+
+        // Update the teamCarUsage if necessary
+        const teamNumber = selectedKartBox.textContent;
+        if (teamCarUsage[teamNumber]) {
+            teamCarUsage[teamNumber][teamCarUsage[teamNumber].length] = selectedKartBox.getAttribute('data-car-id') + " " + selectedKartBox.style.backgroundColor;
+            saveTeamCarUsage(); // Save the updated team car usage
+        }
+
+        // Save the updated box color and ID
+        saveBoxColor(selectedKartBox);
+
+        // Hide the popup
+        replaceKartPopup.style.display = 'none';
+        selectedKartBox = null;
+    } else {
+        alert('Please select a kart to replace.');
+    }
+});
+
+// Close popup when clicking outside of it
+document.addEventListener('click', function (event) {
+    if (replaceKartPopup.style.display === 'block' && !replaceKartPopup.contains(event.target) && !replaceKartButton.contains(event.target)) {
+        replaceKartPopup.style.display = 'none';
+    }
+});
