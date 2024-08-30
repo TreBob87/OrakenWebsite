@@ -4,6 +4,7 @@ body {
     font-family: "Poppins", sans-serif;
     background-color: #2E2F2F;
     background-size: cover;
+    user-select: none;
 }
 
 .container {

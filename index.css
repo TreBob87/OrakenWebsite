@@ -5,6 +5,7 @@ body {
     font-family: "Poppins", sans-serif;
     background-image: url("Pictures/Oraken_Black.jpg");
     background-size: cover;
+    user-select: none;
 }
 
 .container {

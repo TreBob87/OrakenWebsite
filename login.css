@@ -19,6 +19,7 @@ body {
     background: #2ABFAB;
     flex-direction: column;
     margin: 0;
+    user-select: none;
 }
 
 .main {
