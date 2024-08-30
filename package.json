@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "firebase": "10.13"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^5.7.0",
+    "esbuild": "^0.23.1"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "node ./esbuild.config.js"
+  }
+}
