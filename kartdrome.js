@@ -1,7 +1,9 @@
 // Import the Firebase modules you need
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import { getDatabase, ref, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+
 
 // Firebase configuration
 const firebaseConfig = {
@@ -19,24 +21,20 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        console.log(uid);
 
-async function loadKartCounts() {
-    const kartsOnTrackRef = ref(database, 'kartsOnTrackCount');
-    const kartsInPitRef = ref(database, 'kartsInPitCount');
-
-    try {
-        const kartsOnTrackSnapshot = await get(kartsOnTrackRef);
-        const kartsInPitSnapshot = await get(kartsInPitRef);
-
-        const kartsOnTrackCount = kartsOnTrackSnapshot.val() || 45; // Default to 45 if not found
-        const kartsInPitCount = kartsInPitSnapshot.val() || 5; // Default to 5 if not found
-
-        return { kartsOnTrackCount, kartsInPitCount };
-    } catch (error) {
-        console.error('Error fetching kart counts from Firebase:', error);
-        return { kartsOnTrackCount: 45, kartsInPitCount: 5 };
+        // ...
+    } else {
+        // User is signed out
+        window.location.href = 'login.html'
     }
-}
+});
 
 window.onload = async function() {
     await loadTeamCarUsage();
@@ -66,6 +64,24 @@ window.onload = async function() {
         }
     }, true);
 };
+async function loadKartCounts() {
+    const kartsOnTrackRef = ref(database, 'kartsOnTrackCount');
+    const kartsInPitRef = ref(database, 'kartsInPitCount');
+
+    try {
+        const kartsOnTrackSnapshot = await get(kartsOnTrackRef);
+        const kartsInPitSnapshot = await get(kartsInPitRef);
+
+        const kartsOnTrackCount = kartsOnTrackSnapshot.val() || 45; // Default to 45 if not found
+        const kartsInPitCount = kartsInPitSnapshot.val() || 5; // Default to 5 if not found
+
+        return { kartsOnTrackCount, kartsInPitCount };
+    } catch (error) {
+        console.error('Error fetching kart counts from Firebase:', error);
+        return { kartsOnTrackCount: 45, kartsInPitCount: 5 };
+    }
+}
+
 
 let selectedKartBox = null;
 let replacementIdCounter = 70;

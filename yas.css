@@ -2,7 +2,7 @@
 
 body {
     font-family: "Poppins", sans-serif;
-    background-image: url("Pictures/Yas.jpg");
+    background-color: #2E2F2F;
     background-size: cover;
 }
 
@@ -12,6 +12,26 @@ body {
     position: relative; /* Adjust as needed based on your layout */
     z-index: 1; /* Ensure content is above background but below navbar */
     padding-top: 50px; /* Adjust based on navbar height */
+}
+
+.container h2 {
+    display: flex;
+    justify-content: center;
+}
+
+.kartsOnTrackYasContainer {
+    background-color: #ACBDBA;
+    border-radius: 20px;
+}
+
+.kartsInPitYasContainer {
+    background-color: #ACBDBA;
+    border-radius: 20px;
+}
+
+.kartsOnTrackYasContainer.highlighted {
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 10px #FFD700;
 }
 
 .section {
@@ -68,6 +88,7 @@ nav {
     clip-path: circle(24px at 32px 24px);
     -webkit-transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
     transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
+    border-radius: 5px;
 }
 
 nav:hover {
@@ -77,6 +98,7 @@ nav:hover {
     transition-duration: 0.75s;
     -webkit-clip-path: circle(390px at 225px 24px);
     clip-path: circle(390px at 150px 24px);
+    border-radius: 5px;
 }
 
 a {
@@ -91,9 +113,9 @@ a {
     user-select: none;
 }
 
-a:hover { background: #ffe082; }
+a:hover { background: #CDDDDD; }
 
-a:active { background: #ffca28; }
+a:active { background: #2E2F2F; }
 
 .navicon {
     padding: 23px 20px;

@@ -1,6 +1,7 @@
 // Import the Firebase modules you need
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
-import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js';
+import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js';
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,6 +19,20 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        console.log(uid);
+
+        // ...
+    } else {
+        // User is signed out
+        window.location.href = 'login.html'
+    }
+});
 
 async function loadKartCounts() {
     const kartsOnTrackRef = ref(database, 'kartsOnTrackCountKT');

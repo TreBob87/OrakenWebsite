@@ -1,6 +1,7 @@
 // Import the Firebase modules you need
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
-import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js';
+import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js';
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,6 +19,21 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        console.log(uid);
+
+        // ...
+    } else {
+        // User is signed out
+        window.location.href = 'login.html'
+    }
+});
+
 let teamCarUsage = {}; // Object to track car usage by teams
 async function loadKartCounts() {
     const kartsOnTrackRef = ref(database, 'kartsOnTrackCountYas');
@@ -138,10 +154,27 @@ function pickColor(event) {
     }
 }
 
+
+let currentlyHighlighted = null;
 function handleBoxClick(event) {
     if (event.target.classList.contains('box')) {
         const box = event.target;
         const parentID = box.parentNode.id;
+        // Highlight the newly clicked box
+        if (currentlyHighlighted === null || currentlyHighlighted !== box) {
+            box.classList.add('highlighted');
+            currentlyHighlighted = box; // Update the currently highlighted box
+            console.log(currentlyHighlighted)
+        }
+        if (currentlyHighlighted === box) {
+            box.classList.remove('highlighted');
+            currentlyHighlighted = null; // Deselect the box
+        }
+
+        // Remove highlighting from any previously selected box
+        if (currentlyHighlighted && currentlyHighlighted !== box) {
+            currentlyHighlighted.classList.remove('highlighted');
+        }
         if (navigator.vibrate) {
             navigator.vibrate(50); // You can adjust the duration as needed
         }
@@ -173,6 +206,7 @@ function handleBoxClick(event) {
             // After swapping, reset both to require new selections for the next swap
             lastClickedBox.track = null;
             lastClickedBox.pit = null;
+            currentlyHighlighted = null;
         }
     }
 }
