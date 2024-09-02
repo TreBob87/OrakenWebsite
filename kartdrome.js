@@ -25,6 +25,7 @@ window.onload = async function() {
     // Use the loaded counts to create boxes
     createBoxes('kartsOnTrack', kartsOnTrackCount);
     createBoxes('kartsInPit', kartsInPitCount);
+    updateSortOrder()
     await loadBoxColors();
 
     // Add event listeners
