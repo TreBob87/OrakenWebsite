@@ -25,7 +25,7 @@ window.onload = async function() {
     // Use the loaded counts to create boxes
     createBoxes('kartsOnTrack', kartsOnTrackCount);
     createBoxes('kartsInPit', kartsInPitCount);
-    updateSortOrder()
+    await loadSortOrderState();
     await loadBoxColors();
 
     // Add event listeners
@@ -486,3 +486,36 @@ function updateSortOrder() {
 
 // Add event listener to the switch
 document.querySelector('#sortMode .sortButton-input').addEventListener('change', updateSortOrder);
+
+async function saveSortOrderState(isAscending) {
+    try {
+        const sortOrderRef = ref(database, 'sortOrder');
+        await set(sortOrderRef, { isAscending });
+    } catch (error) {
+        console.error('Failed to save sort order state:', error);
+    }
+}
+
+// Add event listener to the switch
+document.querySelector('#sortMode .sortButton-input').addEventListener('change', function () {
+    isAscending = this.checked;
+    updateSortOrder(); // Update the order of boxes
+    saveSortOrderState(isAscending); // Save the state to the database
+});
+
+async function loadSortOrderState() {
+    try {
+        const sortOrderRef = ref(database, 'sortOrder');
+        const snapshot = await get(sortOrderRef);
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            isAscending = data.isAscending;
+            document.querySelector('#sortMode .sortButton-input').checked = isAscending;
+            updateSortOrder(); // Update the order of boxes based on the saved state
+        } else {
+            console.log('No sort order data available, defaulting to ascending.');
+        }
+    } catch (error) {
+        console.error('Failed to load sort order state:', error);
+    }
+}
