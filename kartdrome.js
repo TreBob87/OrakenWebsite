@@ -372,10 +372,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add an event listener for when the checkbox state changes
     qualiModeCheckbox.addEventListener('change', function () {
         if (qualiModeCheckbox.checked) {
-            console.log('Quali Mode is ON');
             checked = true;
         } else {
-            console.log('Quali Mode is OFF');
             checked = false;
             const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box')
             kartsOnTrack.forEach((kart) => teamCarUsage[kart.textContent][teamCarUsage[kart.getAttribute('data-car-id')].length - 1] = kart.getAttribute('data-car-id') + " " + kart.style.backgroundColor);
@@ -466,8 +464,10 @@ document.addEventListener('click', function (event) {
 
 let isAscending = true; // Flag to track the sort order
 
-function toggleSortOrder() {
-    isAscending = !isAscending; // Toggle the sort order flag
+// Function to toggle sort order based on switch state
+function updateSortOrder() {
+    const sortModeSwitch = document.querySelector('#sortMode .sortButton-input');
+    isAscending = sortModeSwitch.checked; // Determine sort order from switch state
     const kartsInPitContainer = document.getElementById('kartsInPit');
     const boxes = Array.from(kartsInPitContainer.getElementsByClassName('box'));
 
@@ -483,5 +483,5 @@ function toggleSortOrder() {
     boxes.forEach(box => kartsInPitContainer.appendChild(box));
 }
 
-// Add event listener to the toggle button
-document.getElementById('toggleSortOrderButton').addEventListener('click', toggleSortOrder);
+// Add event listener to the switch
+document.querySelector('#sortMode .sortButton-input').addEventListener('change', updateSortOrder);
