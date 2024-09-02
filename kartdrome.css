@@ -340,3 +340,22 @@ a:active { background: #2E2F2F; }
     justify-content: center;
     color: #ACBDBA;
 }
+
+#toggleSortOrderButton {
+    margin: 0 auto;
+    padding: 10px 15px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#toggleSortOrderButton:hover {
+    background-color: #d32f2f;
+}
+
+.sortButton {
+    margin: 0 auto;
+    text-align: center;
+}
