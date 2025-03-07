@@ -403,7 +403,6 @@ function addLongPressListener(box) {
         timer = setTimeout(() => {
             longPressTriggered = true;
             showTeamUsage(box.textContent);
-            skipNextClick = true; // Prevent the subsequent click from triggering swap
         }, longPressDuration);
         // Removed e.preventDefault() so that short taps still trigger click events.
     });
