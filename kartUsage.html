@@ -24,9 +24,18 @@
 </nav>
 <div class="container">
     <h3>Dubai</h3>
-    <div id="carUsageDisplay"></div>
-    <h3>Karting Town</h3>
-    <div id="kartUsageDisplay"></div>
+    <div>
+        <input 
+          type="text" 
+          id="searchTerm" 
+          placeholder="Search by color or car number (e.g. 'purple' or '47')"
+          style="padding: 0.5rem; margin-right: 0.5rem;"
+        />
+        <button id="searchBtn">Search</button>
+      </div>
+    
+      <!-- This is where the usage list will appear -->
+      <div id="carUsageDisplay" style="margin-top: 1rem;"></div>
 </div>
 <div id="kartTimers">
     <h3>Kart Timers</h3>
@@ -37,3 +46,4 @@
 <script type="module" src="kartUsage.js"></script>
 </body>
 </html>
+

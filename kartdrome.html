@@ -1,78 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv='cache-control' content='no-cache'>
-    <meta http-equiv='expires' content='0'>
-    <meta http-equiv='pragma' content='no-cache'>
-    <title>Oraken Karting Team</title>
-    <link rel="stylesheet" href="kartdrome.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv='cache-control' content='no-cache'>
+  <meta http-equiv='expires' content='0'>
+  <meta http-equiv='pragma' content='no-cache'>
+  <title>Oraken Karting Team</title>
+  <link rel="stylesheet" href="kartdrome.css">
+  <style>
+    /* Minimal styling for the popup */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .popup-content {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 4px;
+      max-width: 90%;
+      max-height: 90%;
+      overflow-y: auto;
+    }
+    .popup-content h3 {
+      margin-top: 0;
+    }
+  </style>
 </head>
 <body>
-<nav>
+  <nav>
     <div class="navicon">
-        <div></div>
+      <div></div>
     </div>
-
     <a href="index.html">Home</a>
     <a href="kartdrome.html">Dubai Kartdrome</a>
     <a href="kartingtown.html">Karting Town</a>
     <a href="yas.html">Yas Kartzone</a>
     <a href="kartUsage.html">Karts used</a>
+  </nav>
 
-</nav>
-<div class="qualiMode">
+  <div class="qualiMode">
     <h2>Quali Mode</h2>
-<label class="switch" id="qualiMode">
-    <input class="switch-input" type="checkbox"/>
-    <span class="switch-label" data-on="On" data-off="Off"></span>
-    <span class="switch-handle"></span>
-</label>
-</div>
-<div class="container">
+    <label class="switch" id="qualiMode">
+      <input class="switch-input" type="checkbox"/>
+      <span class="switch-label" data-on="On" data-off="Off"></span>
+      <span class="switch-handle"></span>
+    </label>
+  </div>
+
+  <div class="container">
     <h2>Karts on Track</h2>
     <div id="kartsOnTrack" class="section">
-
-        <!-- Boxes for Karts-on-Track will be added by JavaScript -->
+      <!-- Boxes for Karts-on-Track will be added by JavaScript -->
     </div>
     <h2>Pit lane</h2>
     <label class="sortButton" id="sortMode">
-        <input class="sortButton-input" type="checkbox"/>
-        <span class="sortButton-label" data-on="Reverse" data-off="Forward"></span>
-        <span class="sortButton-handle"></span>
+      <input class="sortButton-input" type="checkbox"/>
+      <span class="sortButton-label" data-on="Reverse" data-off="Forward"></span>
+      <span class="sortButton-handle"></span>
     </label>
     <p></p>
     <div id="kartsInPit" class="section">
-
-        <!-- Boxes for Karts-in-Pit will be added by JavaScript -->
+      <!-- Boxes for Karts-in-Pit will be added by JavaScript -->
     </div>
     <h2>Kart Performance</h2>
     <div id="kartPerformance" class="section">
-
-        <div class="box" style="background-color: purple;"></div>
-        <div class="box" style="background-color: green;"></div>
-        <div class="box" style="background-color: yellow;"></div>
-        <div class="box" style="background-color: red;"></div>
-        <div class="box" style="background-color: grey;"></div>
+      <div class="box" style="background-color: purple;"></div>
+      <div class="box" style="background-color: green;"></div>
+      <div class="box" style="background-color: yellow;"></div>
+      <div class="box" style="background-color: red;"></div>
+      <div class="box" style="background-color: grey;"></div>
     </div>
-</div>
-<div class="raceReset">
+  </div>
+
+  <div class="raceReset">
     <button id="resetButton">Click here to Reset</button>
+    <button id="undoSwapButton">Undo Last Swap</button>
 </div>
-<div class="replaceKart">
-    <h2>Kart replacement</h2>
-<button id="replaceKartButton">Replace a Kart</button>
 
-<!-- Popup Container -->
-<div id="replaceKartPopup" class="popup" style="display: none;">
-    <h3>Select a Kart to Replace</h3>
-    <div id="kartSelectionContainer">
+
+  <div class="replaceKart">
+    <h2>Kart replacement</h2>
+    <button id="replaceKartButton">Replace a Kart</button>
+    <!-- Popup Container for Kart Replacement -->
+    <div id="replaceKartPopup" class="popup">
+      <h3>Select a Kart to Replace</h3>
+      <div id="kartSelectionContainer">
         <!-- Kart selection will be populated dynamically -->
+      </div>
+      <button id="confirmReplacementButton">Confirm Replacement</button>
     </div>
-    <button id="confirmReplacementButton">Confirm Replacement</button>
-</div>
-</div>
-<script type="module" src="kartdrome.js"></script>
+  </div>
+
+  <!-- New Popup for Team Usage History -->
+  <div id="teamUsagePopup" class="popup">
+    <div id="teamUsageContent" class="popup-content">
+      <h3>Team <span id="teamNumberPopup"></span> Usage History</h3>
+      <ul id="teamUsageList"></ul>
+      <button id="closeTeamUsagePopup">Close</button>
+    </div>
+  </div>
+
+  <script type="module" src="kartdrome.js"></script>
 </body>
 </html>

@@ -1,135 +1,130 @@
 import { ref, get } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-import { database, auth} from "./firebase.js";
+import { database, auth } from "./firebase.js";
 
+// Optional: ensure user is logged in
 onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        console.log(uid);
-
-        // ...
-    } else {
-        // User is signed out
-        window.location.href = 'login.html'
-    }
+  if (!user) {
+    // Redirect to login if not authenticated
+    window.location.href = 'login.html';
+  }
 });
 
-// Call displayTeamCarUsage on page load
-window.onload = function()
-{
-    displayTeamCarUsage()
-    displayTeamKartUsage()
+window.addEventListener('load', () => {
+  // Initially display everything (no search)
+  displayTeamCarUsage();
 
-    document.getElementById('dubai').addEventListener('click', exportTeamCarUsage)
-    document.getElementById('kt').addEventListener('click', exportTeamKartUsage)
-}
-async function displayTeamCarUsage() {
-    const dbRef = ref(database, 'teamCarUsage');
-    try {
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-            const teamCarUsage = snapshot.val();  // Gets the actual data from Firebase
-            let content = '<ul>';
-            for (const [team, cars] of Object.entries(teamCarUsage)) {
-                content += `<li><strong>${team}:</strong> ${cars.join(', ')}</li>`;
-            }
-            content += '</ul>';
-            document.getElementById('carUsageDisplay').innerHTML = content;
-        } else {
-            document.getElementById('carUsageDisplay').innerHTML = '<p>No car usage data available.</p>';
-        }
-    } catch (error) {
-        console.error('Failed to load team car usage:', error);
+  // When user clicks "Search," we apply the filter logic
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const searchValue = document.getElementById('searchTerm').value.trim();
+    displayTeamCarUsage(searchValue);
+  });
+});
+
+/**
+ * Fetches data from 'teamCarUsage' in Firebase and displays it in two modes:
+ * 1) If no searchTerm given, show the *entire* usage line for each team.
+ * 2) If searchTerm is given, parse the *last* usage entry for each team:
+ *    - If searchTerm is all digits, do an *exact* match on carId.
+ *    - Otherwise, do a *partial* match on color (case-insensitive).
+ *    Only show that team if the last entry matches.
+ */
+async function displayTeamCarUsage(searchTerm = "") {
+  const dbRef = ref(database, 'teamCarUsage');
+  try {
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) {
+      document.getElementById('carUsageDisplay').innerHTML =
+        "<p>No car usage data found.</p>";
+      return;
     }
-}
 
-async function displayTeamKartUsage() {
-    const dbRef = ref(database, 'teamKartUsage');
-    try {
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-            const teamKartUsage = snapshot.val();  // Gets the actual data from Firebase
-            let content = '<ul>';
-            for (const [team, cars] of Object.entries(teamKartUsage)) {
-                content += `<li><strong>${team}:</strong> ${cars.join(', ')}</li>`;
-            }
-            content += '</ul>';
-            document.getElementById('kartUsageDisplay').innerHTML = content;
-        } else {
-            document.getElementById('kartUsageDisplay').innerHTML = '<p>No car usage data available.</p>';
+    const teamCarUsage = snapshot.val();
+    let html = "<ul>";
+
+    // Go through each team (1, 2, 3, etc.)
+    for (const [teamId, usageArray] of Object.entries(teamCarUsage)) {
+      // usageArray might be:
+      // ["1 purple", "48 yellow at 9:48:45 PM", "2 green at 9:48:54 PM"]
+      if (!Array.isArray(usageArray) || usageArray.length === 0) {
+        continue;
+      }
+
+      // If there's NO search term, show the entire usage line
+      if (!searchTerm) {
+        const usageLine = usageArray.join("; ");
+        html += `<li><strong>${teamId}:</strong> ${usageLine}</li>`;
+        continue;
+      }
+
+      // Otherwise, we have a searchTerm. We only display the *last* entry if it matches.
+      const lastEntry = usageArray[usageArray.length - 1];
+      const parsed = parseUsageString(lastEntry);
+
+      // If parsing fails or returns null, skip
+      if (!parsed) {
+        continue;
+      }
+
+      const { carId, color } = parsed;
+
+      // If searchTerm is numeric => exact match on carId
+      if (isNumeric(searchTerm)) {
+        if (carId === searchTerm) {
+          // Show only the last entry
+          html += `<li><strong>${teamId}:</strong> ${lastEntry}</li>`;
         }
-    } catch (error) {
-        console.error('Failed to load team car usage:', error);
-    }
-}
-
-async function exportTeamCarUsage() {
-    const dbRef = ref(database, 'teamCarUsage');
-    try {
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-            const loadedData = snapshot.val();  // Gets the actual data from Firebase
-            const teamCarUsageCSV = convertTeamCarUsageToCSV(loadedData);
-            downloadCSV(teamCarUsageCSV, "teamCarUsage.csv");
-        } else {
-            document.getElementById('carUsageDisplay').innerHTML = '<p>No car usage data available.</p>';
+      } else {
+        // Otherwise, do a partial match on color (case-insensitive)
+        if (color.toLowerCase().includes(searchTerm.toLowerCase())) {
+          html += `<li><strong>${teamId}:</strong> ${lastEntry}</li>`;
         }
-    } catch (error) {
-        console.error('Failed to load team car usage:', error);
+      }
     }
-}
-function convertTeamCarUsageToCSV(teamCarUsage) {
-    let csvContent = "Car ID,Colors\n"; // Start with the header
 
-    // Build CSV content
-    Object.entries(teamCarUsage).forEach(([carId, colors]) => {
-        let colorString = colors.join(';');
-        csvContent += `${carId},${colorString}\n`;
-    });
+    html += "</ul>";
 
-    // Convert to Blob
-    return new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-}
-
-async function exportTeamKartUsage() {
-    const dbRef = ref(database, 'teamKartUsage');
-    try {
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-            const loadedData = snapshot.val();  // Gets the actual data from Firebase
-            const teamKartUsageCSV = convertTeamKartUsageToCSV(loadedData);
-            downloadCSV(teamKartUsageCSV, "teamKartUsage.csv");
-        } else {
-            document.getElementById('kartUsageDisplay').innerHTML = '<p>No car usage data available.</p>';
-        }
-    } catch (error) {
-        console.error('Failed to load team car usage:', error);
+    // If we have no <li>, it means no matching results
+    if (!html.includes("<li>")) {
+      html = "<p>No matching results.</p>";
     }
+
+    document.getElementById('carUsageDisplay').innerHTML = html;
+
+  } catch (error) {
+    console.error("Failed to load teamCarUsage:", error);
+    document.getElementById('carUsageDisplay').innerHTML =
+      `<p style="color:red;">Error: ${error.message}</p>`;
+  }
 }
 
-function convertTeamKartUsageToCSV(teamKartUsage) {
-    let csvContent = "Car ID,Colors\n"; // Start with the header
-
-    // Build CSV content
-    Object.entries(teamKartUsage).forEach(([carId, colors]) => {
-        let colorString = colors.join(';');
-        csvContent += `${carId},${colorString}\n`;
-    });
-
-    // Convert to Blob
-    return new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+/**
+ * Parse a usage string of the form:
+ *   "carId color"
+ *   or
+ *   "carId color at time"
+ *
+ * e.g. "48 yellow at 9:48:45 PM"
+ * Returns { carId, color, time } or null if it doesn't parse.
+ */
+function parseUsageString(usageString) {
+  // Example regex:
+  // ^(\d+)         -> 1) one or more digits (carId)
+  // \s+([a-zA-Z]+) -> 2) one or more letters (color)
+  // (?:\s+at\s+(.+))? -> optional "at time"
+  const usageRegex = /^(\d+)\s+([a-zA-Z]+)(?:\s+at\s+(.+))?$/;
+  const match = usageString.match(usageRegex);
+  if (!match) {
+    return null;
+  }
+  return {
+    carId: match[1],      // e.g. "48"
+    color: match[2],      // e.g. "yellow"
+    time: match[3] || ""  // e.g. "9:48:45 PM" or ""
+  };
 }
 
-function downloadCSV(csvBlob, fileName) {
-    // Create an object URL for the blob
-    let url = URL.createObjectURL(csvBlob);
-    let link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", fileName);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url); // Clean up
+/** Helper to check if a string is purely digits (e.g. "2" => true, "12" => true, "2a" => false). */
+function isNumeric(str) {
+  return /^\d+$/.test(str);
 }
