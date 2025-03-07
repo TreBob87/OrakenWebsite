@@ -69,7 +69,7 @@ async function loadKartCounts() {
 }
 
 let selectedKartBox = null;
-let replacementIdCounter = 70;
+let replacementIdCounter = 1;
 let checked;
 let selectedColor = '';
 let lastClickedBox = { track: null, pit: null };
@@ -251,7 +251,7 @@ async function resetColors() {
             document.getElementById('kartsInPit').innerHTML = '';
             createBoxes('kartsOnTrack', validKartsOnTrackCount);
             createBoxes('kartsInPit', validKartsInPitCount);
-            replacementIdCounter = 70;
+            replacementIdCounter = 1;
         } catch (error) {
             console.error('Failed to reset colors:', error);
         }
@@ -492,7 +492,7 @@ replaceKartButton.addEventListener('click', function () {
 
 confirmReplacementButton.addEventListener('click', function () {
     if (selectedKartBox) {
-        selectedKartBox.setAttribute('data-car-id', replacementIdCounter.toString());
+        selectedKartBox.setAttribute('data-car-id', "r" + replacementIdCounter.toString());
         selectedKartBox.style.backgroundColor = 'grey';
         replacementIdCounter++;
         const teamNumber = selectedKartBox.textContent;
