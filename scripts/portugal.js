@@ -254,6 +254,7 @@ async function resetColors() {
             await set(ref(database, 'kartsInPitCountP'), validKartsInPitCount);
             await remove(ref(database, 'boxColorsP'));
             teamCarUsage = {};
+            kartUsage = {}
             await saveTeamCarUsage();
             document.getElementById('kartsOnTrackP').innerHTML = '';
             document.getElementById('kartsInPitP').innerHTML = '';
@@ -593,12 +594,20 @@ function showLastUsedTeamForPitKart(kartId) {
     teamNumberElem.textContent = `Kart ${kartId}`;
     listElem.innerHTML = "";
 
-    const li = document.createElement('li');
-    li.textContent = usageHistory && usageHistory.length
-        ? `Last used by ${usageHistory[usageHistory.length - 1]}`
-        : "No recorded team usage yet.";
+    if (usageHistory === undefined || usageHistory.length == 0) {
+        const li = document.createElement('li');
+        li.textContent = "No recorded team usage yet.";
+    }
+    else {
+        for (let i = 0 ; i < usageHistory.length; i++ ) {
+            console.log(usageHistory[i])
+            const li = document.createElement('li');
+            li.textContent = usageHistory[i]
+            listElem.appendChild(li);
+        }
+    }
+    
 
-    listElem.appendChild(li);
     popup.style.display = 'flex';
 }
 
