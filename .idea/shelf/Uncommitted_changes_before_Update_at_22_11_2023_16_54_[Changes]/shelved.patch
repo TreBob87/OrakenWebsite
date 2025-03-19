@@ -1,0 +1,765 @@
+Index: kartdrome.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@import url(\"https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap\");\r\n\r\nbody {\r\n    font-family: \"Poppins\", sans-serif;\r\n    background-image: url(\"Pictures/Kartdrome.jpg\");\r\n    background-size: cover;\r\n    box-sizing: border-box;\r\n}\r\n\r\n.container {\r\n    width: 80%;\r\n    margin: 0 auto;\r\n}\r\n\r\n.section {\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.box {\r\n    display: inline-flex; /* Enables the use of flexbox properties */\r\n    justify-content: center; /* Horizontally centers the content */\r\n    align-items: center; /* Vertically centers the content */\r\n    width: 50px;\r\n    height: 50px;\r\n    margin: 5px;\r\n    border: 1px solid black;\r\n    cursor: pointer;\r\n    font-size: 12px; /* Adjust the font size as needed */\r\n    text-align: center;\r\n    overflow: hidden; /* Prevents text overflow */\r\n    text-overflow: ellipsis; /* Adds an ellipsis if the text overflows */\r\n    white-space: nowrap; /* Ensures the text stays on a single line */\r\n}\r\n\r\n/* Navbar styling */\r\n\r\n.hamburger-icon {\r\n    position: absolute;\r\n    z-index: 1;\r\n    top: 5vh;\r\n    left: 5vw;\r\n    padding-bottom: 2vh;\r\n}\r\n\r\n.hamburger-icon span {\r\n    height: 5px;\r\n    width: 40px;\r\n    background-color: white;\r\n    display: block;\r\n    margin: 5px 0px 5px 0px;\r\n    transition: 0.7s ease-in-out;\r\n    transform: none;\r\n}\r\n\r\n#openmenu:checked ~ .menu-pane {\r\n    left: -5vw;\r\n    transform: translateX(-5vw);\r\n}\r\n\r\n#openmenu:checked ~ .body-text {\r\n    display: none;\r\n}\r\n\r\n#openmenu:checked ~ .hamburger-icon span:nth-of-type(2) {\r\n    transform: translate(0%, 175%) rotate(-45deg);\r\n    background-color: white;\r\n}\r\n\r\n#openmenu:checked ~ .hamburger-icon span:nth-of-type(3) {\r\n    transform: rotate(45deg);\r\n    background-color: white;\r\n}\r\n\r\n#openmenu:checked ~ .hamburger-icon span:nth-of-type(1) {\r\n    opacity: 0;\r\n}\r\n\r\n#openmenu:checked ~ .hamburger-icon span:nth-of-type(4) {\r\n    opacity: 0;\r\n}\r\n\r\ndiv.menu-pane {\r\n    background-color: #000;\r\n    position: absolute;\r\n    transform: translateX(-105vw);\r\n    width: 100vw;\r\n    height: 100%;\r\n    transition: 0.6s ease-in-out;\r\n}\r\n\r\n.menu-pane nav {\r\n    padding: 10%;\r\n}\r\n\r\n.menu-links li, a, span {\r\n    transition: 0.5s ease-in-out;\r\n}\r\n\r\n.menu-pane ul {\r\n    padding: 10%;\r\n    display: inline-block;\r\n}\r\n\r\n.menu-pane li {\r\n    padding-top: 20px;\r\n    padding-bottom: 20px;\r\n    margin-left: 10px;\r\n    font-size: 1em;\r\n}\r\n\r\n\r\n.menu-pane li:first-child {\r\n    font-size: 1.3em;\r\n}\r\n\r\n#team {\r\n    margin-left: -10px;\r\n}\r\n\r\n.menu-links li a {\r\n    color: white;\r\n    text-decoration: none;\r\n}\r\n\r\n\r\n.menu-links li:hover a {\r\n    color: #2ABFAB;\r\n}\r\n\r\n.menu-links li:first-child:hover a {\r\n    color: black;\r\n    background-color: #2ABFAB;\r\n}\r\n\r\n.menu-links li:first-child a {\r\n    padding: 5px;\r\n}\r\n\r\ninput.hamburger-checkbox {\r\n    position: absolute;\r\n    z-index: 3;\r\n    top: 5vh;\r\n    left: 5vw;\r\n    width: 10vw;\r\n    opacity: 0;\r\n    height: 6vh;\r\n}\r\n\r\n.raceReset {\r\n    margin-top: 20px;\r\n    text-align: center;\r\n}\r\n\r\n#resetButton {\r\n    padding: 10px 15px;\r\n    background-color: #f44336;\r\n    color: white;\r\n    border: none;\r\n    border-radius: 5px;\r\n    cursor: pointer;\r\n}\r\n\r\n#resetButton:hover {\r\n    background-color: #d32f2f;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/kartdrome.css b/kartdrome.css
+--- a/kartdrome.css	
++++ b/kartdrome.css	
+@@ -33,118 +33,69 @@
+ }
+ 
+ /* Navbar styling */
++nav {
++    width: 300px;
++    background: white;
++    color: rgba(0, 0, 0, 0.87);
++    -webkit-clip-path: circle(24px at 30px 24px);
++    clip-path: circle(24px at 32px 24px);
++    -webkit-transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
++    transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
++}
+ 
+-.hamburger-icon {
+-    position: absolute;
+-    z-index: 1;
+-    top: 5vh;
+-    left: 5vw;
+-    padding-bottom: 2vh;
++nav:hover {
++    -webkit-transition-timing-function: ease-out;
++    transition-timing-function: ease-out;
++    -webkit-transition-duration: 0.75s;
++    transition-duration: 0.75s;
++    -webkit-clip-path: circle(390px at 225px 24px);
++    clip-path: circle(390px at 150px 24px);
+ }
+ 
+-.hamburger-icon span {
+-    height: 5px;
+-    width: 40px;
+-    background-color: white;
++a {
+     display: block;
+-    margin: 5px 0px 5px 0px;
+-    transition: 0.7s ease-in-out;
+-    transform: none;
+-}
+-
+-#openmenu:checked ~ .menu-pane {
+-    left: -5vw;
+-    transform: translateX(-5vw);
+-}
+-
+-#openmenu:checked ~ .body-text {
+-    display: none;
++    line-height: 50px;
++    padding: 0 20px;
++    color: inherit;
++    cursor: pointer;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
+ }
+ 
+-#openmenu:checked ~ .hamburger-icon span:nth-of-type(2) {
+-    transform: translate(0%, 175%) rotate(-45deg);
+-    background-color: white;
+-}
++a:hover { background: #ffe082; }
+ 
+-#openmenu:checked ~ .hamburger-icon span:nth-of-type(3) {
+-    transform: rotate(45deg);
+-    background-color: white;
+-}
++a:active { background: #ffca28; }
+ 
+-#openmenu:checked ~ .hamburger-icon span:nth-of-type(1) {
+-    opacity: 0;
++.navicon {
++    padding: 23px 20px;
++    cursor: pointer;
++    -webkit-transform-origin: 32px 24px;
++    -ms-transform-origin: 32px 24px;
++    transform-origin: 32px 24px;
+ }
+ 
+-#openmenu:checked ~ .hamburger-icon span:nth-of-type(4) {
+-    opacity: 0;
++.navicon div {
++    position: relative;
++    width: 20px;
++    height: 2px;
++    background: rgba(0, 0, 0, 0.87);
+ }
+ 
+-div.menu-pane {
+-    background-color: #000;
++.navicon div:before,
++.navicon div:after {
++    display: block;
++    content: "";
++    width: 20px;
++    height: 2px;
++    background: rgba(0, 0, 0, 0.87);
+     position: absolute;
+-    transform: translateX(-105vw);
+-    width: 100vw;
+-    height: 100%;
+-    transition: 0.6s ease-in-out;
+-}
+-
+-.menu-pane nav {
+-    padding: 10%;
+-}
+-
+-.menu-links li, a, span {
+-    transition: 0.5s ease-in-out;
+-}
+-
+-.menu-pane ul {
+-    padding: 10%;
+-    display: inline-block;
+-}
+-
+-.menu-pane li {
+-    padding-top: 20px;
+-    padding-bottom: 20px;
+-    margin-left: 10px;
+-    font-size: 1em;
+-}
+-
+-
+-.menu-pane li:first-child {
+-    font-size: 1.3em;
+-}
+-
+-#team {
+-    margin-left: -10px;
+-}
+-
+-.menu-links li a {
+-    color: white;
+-    text-decoration: none;
+ }
+ 
++.navicon div:before { top: -7px; }
+ 
+-.menu-links li:hover a {
+-    color: #2ABFAB;
+-}
+-
+-.menu-links li:first-child:hover a {
+-    color: black;
+-    background-color: #2ABFAB;
+-}
+-
+-.menu-links li:first-child a {
+-    padding: 5px;
+-}
+-
+-input.hamburger-checkbox {
+-    position: absolute;
+-    z-index: 3;
+-    top: 5vh;
+-    left: 5vw;
+-    width: 10vw;
+-    opacity: 0;
+-    height: 6vh;
+-}
++.navicon div:after { top: 7px; }
+ 
+ .raceReset {
+     margin-top: 20px;
+Index: kartdrome.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Oraken Karting Team</title>\r\n    <link rel=\"stylesheet\" href=\"kartdrome.css\">\r\n</head>\r\n<body>\r\n<div class=\"menu-container\">\r\n\r\n    <input type=\"checkbox\" id=\"openmenu\" class=\"hamburger-checkbox\">\r\n\r\n    <div class=\"hamburger-icon\">\r\n        <label for=\"openmenu\" id=\"hamburger-label\">\r\n            <span></span>\r\n            <span></span>\r\n            <span></span>\r\n            <span></span>\r\n        </label>\r\n    </div>\r\n\r\n    <div class=\"menu-pane\">\r\n\r\n        <nav>\r\n            <ul class=\"menu-links\">\r\n                <li><a href=\"home.html\">Home</a></li>\r\n                <li id=\"team\"><a href=\"###\">Team Members</a></li>\r\n            </ul>\r\n            <ul class=\"menu-links\">\r\n                <li><a href=\"kartdrome.html\">Dubai Kartdrome</a></li>\r\n                <li><a href=\"###\">Race Results</a></li>\r\n            </ul>\r\n            <ul class=\"menu-links\">\r\n                <li><a href=\"kartingtown.html\">Karting Town</a></li>\r\n                <li><a href=\"###\">Race Results</a></li>\r\n            </ul>\r\n            <ul class=\"menu-links\">\r\n                <li><a href=\"yas.html\">Yas Kartzone</a></li>\r\n                <li><a href=\"###\">Race Results</a></li>\r\n            </ul>\r\n        </nav>\r\n    </div>\r\n</div>\r\n<div class=\"container\">\r\n    <div id=\"kartsOnTrack\" class=\"section\">\r\n        <h2>Karts-on-Track</h2>\r\n        <!-- Boxes for Karts-on-Track will be added by JavaScript -->\r\n    </div>\r\n\r\n    <div id=\"kartsInPit\" class=\"section\">\r\n        <h2>Karts-in-Pit</h2>\r\n        <!-- Boxes for Karts-in-Pit will be added by JavaScript -->\r\n    </div>\r\n\r\n    <div id=\"kartPerformance\" class=\"section\">\r\n        <h2>Kart-Performance</h2>\r\n        <div class=\"box\" style=\"background-color: purple;\"></div>\r\n        <div class=\"box\" style=\"background-color: green;\"></div>\r\n        <div class=\"box\" style=\"background-color: yellow;\"></div>\r\n        <div class=\"box\" style=\"background-color: red;\"></div>\r\n        <div class=\"box\" style=\"background-color: grey;\"></div>\r\n    </div>\r\n</div>\r\n<div class=\"raceReset\">\r\n    <button id=\"resetButton\">Click here to Reset</button>\r\n</div>\r\n<script src=\"kartdrome.js\"></script>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/kartdrome.html b/kartdrome.html
+--- a/kartdrome.html	
++++ b/kartdrome.html	
+@@ -7,41 +7,16 @@
+     <link rel="stylesheet" href="kartdrome.css">
+ </head>
+ <body>
+-<div class="menu-container">
+-
+-    <input type="checkbox" id="openmenu" class="hamburger-checkbox">
+-
+-    <div class="hamburger-icon">
+-        <label for="openmenu" id="hamburger-label">
+-            <span></span>
+-            <span></span>
+-            <span></span>
+-            <span></span>
+-        </label>
+-    </div>
+-
+-    <div class="menu-pane">
+-
+-        <nav>
+-            <ul class="menu-links">
+-                <li><a href="home.html">Home</a></li>
+-                <li id="team"><a href="###">Team Members</a></li>
+-            </ul>
+-            <ul class="menu-links">
+-                <li><a href="kartdrome.html">Dubai Kartdrome</a></li>
+-                <li><a href="###">Race Results</a></li>
+-            </ul>
+-            <ul class="menu-links">
+-                <li><a href="kartingtown.html">Karting Town</a></li>
+-                <li><a href="###">Race Results</a></li>
+-            </ul>
+-            <ul class="menu-links">
+-                <li><a href="yas.html">Yas Kartzone</a></li>
+-                <li><a href="###">Race Results</a></li>
+-            </ul>
+-        </nav>
++<nav>
++    <div class="navicon">
++        <div></div>
+     </div>
+-</div>
++    <a href="index.html">Home</a>
++    <a href="kartdrome.html">Dubai Kartdrome</a>
++    <a href="kartingtown.html">Karting Town</a>
++    <a href="yas.html">Yas Kartzone</a>
++    <a>Team Members</a>
++</nav>
+ <div class="container">
+     <div id="kartsOnTrack" class="section">
+         <h2>Karts-on-Track</h2>
+Index: kartingtown.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@import url(\"https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap\");\r\n\r\n\r\nbody {\r\n    font-family: \"Poppins\", sans-serif;\r\n    background-image: url(\"Pictures/KartingTown.jpg\");\r\n    background-size: cover;\r\n}\r\n\r\n.container {\r\n    width: 80%;\r\n    margin: 0 auto;\r\n}\r\n\r\n.section {\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.box {\r\n    display: inline-flex; /* Enables the use of flexbox properties */\r\n    justify-content: center; /* Horizontally centers the content */\r\n    align-items: center; /* Vertically centers the content */\r\n    width: 50px;\r\n    height: 50px;\r\n    margin: 5px;\r\n    border: 1px solid black;\r\n    cursor: pointer;\r\n    font-size: 12px; /* Adjust the font size as needed */\r\n    text-align: center;\r\n    overflow: hidden; /* Prevents text overflow */\r\n    text-overflow: ellipsis; /* Adds an ellipsis if the text overflows */\r\n    white-space: nowrap; /* Ensures the text stays on a single line */\r\n}\r\n\r\n\r\n/* Navbar styling */\r\n\r\n\r\n.nav {\r\n    max-width: 1050px;\r\n    width: 90%;\r\n    margin: auto;\r\n}\r\n\r\n.navbar {\r\n    width: 100%;\r\n    box-shadow: 0 1px 4px rgb(146 161 176 / 15%);\r\n}\r\n\r\n.nav-container {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    height: 62px;\r\n}\r\n\r\n.navbar .menu-items {\r\n    display: flex;\r\n}\r\n\r\n.navbar .nav-container li {\r\n    list-style: none;\r\n}\r\n\r\n.navbar .nav-container a {\r\n    text-decoration: none;\r\n    color: #0e2431;\r\n    font-weight: 500;\r\n    font-size: 1.2rem;\r\n    padding: 0.7rem;\r\n}\r\n\r\n.navbar .nav-container a:hover{\r\n    font-weight: bolder;\r\n}\r\n\r\n.nav-container {\r\n    display: block;\r\n    position: relative;\r\n    height: 60px;\r\n}\r\n\r\n.nav-container .checkbox {\r\n    position: absolute;\r\n    display: block;\r\n    height: 32px;\r\n    width: 32px;\r\n    top: 20px;\r\n    left: 20px;\r\n    z-index: 5;\r\n    opacity: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.nav-container .hamburger-lines {\r\n    display: block;\r\n    height: 26px;\r\n    width: 32px;\r\n    position: absolute;\r\n    top: 17px;\r\n    left: 20px;\r\n    z-index: 2;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n}\r\n\r\n.nav-container .hamburger-lines .line {\r\n    display: block;\r\n    height: 4px;\r\n    width: 100%;\r\n    border-radius: 10px;\r\n    background: #0e2431;\r\n}\r\n\r\n.nav-container .hamburger-lines .line1 {\r\n    transform-origin: 0% 0%;\r\n    transition: transform 0.4s ease-in-out;\r\n}\r\n\r\n.nav-container .hamburger-lines .line2 {\r\n    transition: transform 0.2s ease-in-out;\r\n}\r\n\r\n.nav-container .hamburger-lines .line3 {\r\n    transform-origin: 0% 100%;\r\n    transition: transform 0.4s ease-in-out;\r\n}\r\n\r\n.navbar .menu-items {\r\n    padding-top: 120px;\r\n    box-shadow: inset 0 0 2000px rgba(200, 255, 255, 0);\r\n    height: 100vh;\r\n    width: 100%;\r\n    transform: translate(-150%);\r\n    display: flex;\r\n    flex-direction: column;\r\n    margin-left: -40px;\r\n    padding-left: 50px;\r\n    transition: transform 0.5s ease-in-out;\r\n    text-align: center;\r\n}\r\n\r\n.navbar .menu-items li {\r\n    margin-bottom: 1.2rem;\r\n    font-size: 1.5rem;\r\n    font-weight: 500;\r\n}\r\n\r\n.logo {\r\n    position: absolute;\r\n    top: 5px;\r\n    right: 15px;\r\n    font-size: 1.2rem;\r\n    color: #0e2431;\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .menu-items {\r\n    transform: translateX(0);\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .hamburger-lines .line1 {\r\n    transform: rotate(45deg);\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .hamburger-lines .line2 {\r\n    transform: scaleY(0);\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .hamburger-lines .line3 {\r\n    transform: rotate(-45deg);\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .logo{\r\n    display: none;\r\n}\r\n\r\n\r\n.raceReset {\r\n    margin-top: 20px;\r\n    text-align: center;\r\n}\r\n\r\n#resetButton {\r\n    padding: 10px 15px;\r\n    background-color: #f44336;\r\n    color: white;\r\n    border: none;\r\n    border-radius: 5px;\r\n    cursor: pointer;\r\n}\r\n\r\n#resetButton:hover {\r\n    background-color: #d32f2f;\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/kartingtown.css b/kartingtown.css
+--- a/kartingtown.css	
++++ b/kartingtown.css	
+@@ -34,146 +34,69 @@
+ 
+ 
+ /* Navbar styling */
+-
+-
+-.nav {
+-    max-width: 1050px;
+-    width: 90%;
+-    margin: auto;
+-}
+-
+-.navbar {
+-    width: 100%;
+-    box-shadow: 0 1px 4px rgb(146 161 176 / 15%);
+-}
+-
+-.nav-container {
+-    display: flex;
+-    justify-content: space-between;
+-    align-items: center;
+-    height: 62px;
+-}
+-
+-.navbar .menu-items {
+-    display: flex;
+-}
+-
+-.navbar .nav-container li {
+-    list-style: none;
++nav {
++    width: 300px;
++    background: white;
++    color: rgba(0, 0, 0, 0.87);
++    -webkit-clip-path: circle(24px at 30px 24px);
++    clip-path: circle(24px at 32px 24px);
++    -webkit-transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
++    transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
+ }
+ 
+-.navbar .nav-container a {
+-    text-decoration: none;
+-    color: #0e2431;
+-    font-weight: 500;
+-    font-size: 1.2rem;
+-    padding: 0.7rem;
++nav:hover {
++    -webkit-transition-timing-function: ease-out;
++    transition-timing-function: ease-out;
++    -webkit-transition-duration: 0.75s;
++    transition-duration: 0.75s;
++    -webkit-clip-path: circle(390px at 225px 24px);
++    clip-path: circle(390px at 150px 24px);
+ }
+ 
+-.navbar .nav-container a:hover{
+-    font-weight: bolder;
+-}
+-
+-.nav-container {
++a {
+     display: block;
++    line-height: 50px;
++    padding: 0 20px;
++    color: inherit;
++    cursor: pointer;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++}
++
++a:hover { background: #ffe082; }
++
++a:active { background: #ffca28; }
++
++.navicon {
++    padding: 23px 20px;
++    cursor: pointer;
++    -webkit-transform-origin: 32px 24px;
++    -ms-transform-origin: 32px 24px;
++    transform-origin: 32px 24px;
++}
++
++.navicon div {
+     position: relative;
+-    height: 60px;
++    width: 20px;
++    height: 2px;
++    background: rgba(0, 0, 0, 0.87);
+ }
+ 
+-.nav-container .checkbox {
+-    position: absolute;
++.navicon div:before,
++.navicon div:after {
+     display: block;
+-    height: 32px;
+-    width: 32px;
+-    top: 20px;
+-    left: 20px;
+-    z-index: 5;
+-    opacity: 0;
+-    cursor: pointer;
+-}
+-
+-.nav-container .hamburger-lines {
+-    display: block;
+-    height: 26px;
+-    width: 32px;
++    content: "";
++    width: 20px;
++    height: 2px;
++    background: rgba(0, 0, 0, 0.87);
+     position: absolute;
+-    top: 17px;
+-    left: 20px;
+-    z-index: 2;
+-    display: flex;
+-    flex-direction: column;
+-    justify-content: space-between;
+-}
+-
+-.nav-container .hamburger-lines .line {
+-    display: block;
+-    height: 4px;
+-    width: 100%;
+-    border-radius: 10px;
+-    background: #0e2431;
+-}
+-
+-.nav-container .hamburger-lines .line1 {
+-    transform-origin: 0% 0%;
+-    transition: transform 0.4s ease-in-out;
+-}
+-
+-.nav-container .hamburger-lines .line2 {
+-    transition: transform 0.2s ease-in-out;
+-}
+-
+-.nav-container .hamburger-lines .line3 {
+-    transform-origin: 0% 100%;
+-    transition: transform 0.4s ease-in-out;
+-}
+-
+-.navbar .menu-items {
+-    padding-top: 120px;
+-    box-shadow: inset 0 0 2000px rgba(200, 255, 255, 0);
+-    height: 100vh;
+-    width: 100%;
+-    transform: translate(-150%);
+-    display: flex;
+-    flex-direction: column;
+-    margin-left: -40px;
+-    padding-left: 50px;
+-    transition: transform 0.5s ease-in-out;
+-    text-align: center;
+-}
+-
+-.navbar .menu-items li {
+-    margin-bottom: 1.2rem;
+-    font-size: 1.5rem;
+-    font-weight: 500;
+-}
+-
+-.logo {
+-    position: absolute;
+-    top: 5px;
+-    right: 15px;
+-    font-size: 1.2rem;
+-    color: #0e2431;
+ }
+ 
+-.nav-container input[type="checkbox"]:checked ~ .menu-items {
+-    transform: translateX(0);
+-}
++.navicon div:before { top: -7px; }
+ 
+-.nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line1 {
+-    transform: rotate(45deg);
+-}
+-
+-.nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line2 {
+-    transform: scaleY(0);
+-}
+-
+-.nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
+-    transform: rotate(-45deg);
+-}
+-
+-.nav-container input[type="checkbox"]:checked ~ .logo{
+-    display: none;
+-}
++.navicon div:after { top: 7px; }
+ 
+ 
+ .raceReset {
+Index: yas.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@import url(\"https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap\");\r\n\r\nbody {\r\n    font-family: \"Poppins\", sans-serif;\r\n    background-image: url(\"Pictures/Yas.jpg\");\r\n    background-size: cover;\r\n}\r\n\r\n.container {\r\n    width: 80%;\r\n    margin: 0 auto;\r\n}\r\n\r\n.section {\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.box {\r\n    display: inline-flex; /* Enables the use of flexbox properties */\r\n    justify-content: center; /* Horizontally centers the content */\r\n    align-items: center; /* Vertically centers the content */\r\n    width: 50px;\r\n    height: 50px;\r\n    margin: 5px;\r\n    border: 1px solid black;\r\n    cursor: pointer;\r\n    font-size: 12px; /* Adjust the font size as needed */\r\n    text-align: center;\r\n    overflow: hidden; /* Prevents text overflow */\r\n    text-overflow: ellipsis; /* Adds an ellipsis if the text overflows */\r\n    white-space: nowrap; /* Ensures the text stays on a single line */\r\n}\r\n\r\n/* Navbar styling */\r\n\r\n\r\n.nav {\r\n    max-width: 1050px;\r\n    width: 90%;\r\n    margin: auto;\r\n}\r\n\r\n.navbar {\r\n    width: 100%;\r\n}\r\n\r\n.nav-container {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    height: 62px;\r\n}\r\n\r\n.navbar .menu-items {\r\n    display: flex;\r\n}\r\n\r\n.navbar .nav-container li {\r\n    list-style: none;\r\n}\r\n\r\n.navbar .nav-container a {\r\n    text-decoration: none;\r\n    color: #0e2431;\r\n    font-weight: 500;\r\n    font-size: 1.2rem;\r\n    padding: 0.7rem;\r\n}\r\n\r\n.navbar .nav-container a:hover{\r\n    font-weight: bolder;\r\n}\r\n\r\n.nav-container {\r\n    display: block;\r\n    position: relative;\r\n    height: 60px;\r\n}\r\n\r\n.nav-container .checkbox {\r\n    position: absolute;\r\n    display: block;\r\n    height: 32px;\r\n    width: 32px;\r\n    top: 20px;\r\n    left: 20px;\r\n    z-index: 5;\r\n    opacity: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.nav-container .hamburger-lines {\r\n    display: block;\r\n    height: 26px;\r\n    width: 32px;\r\n    position: absolute;\r\n    top: 17px;\r\n    left: 20px;\r\n    z-index: 2;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n}\r\n\r\n.nav-container .hamburger-lines .line {\r\n    display: block;\r\n    height: 4px;\r\n    width: 100%;\r\n    border-radius: 10px;\r\n    background: #0e2431;\r\n}\r\n\r\n.nav-container .hamburger-lines .line1 {\r\n    transform-origin: 0% 0%;\r\n    transition: transform 0.4s ease-in-out;\r\n}\r\n\r\n.nav-container .hamburger-lines .line2 {\r\n    transition: transform 0.2s ease-in-out;\r\n}\r\n\r\n.nav-container .hamburger-lines .line3 {\r\n    transform-origin: 0% 100%;\r\n    transition: transform 0.4s ease-in-out;\r\n}\r\n\r\n.navbar .menu-items {\r\n    padding-top: 120px;\r\n    box-shadow: inset 0 0 2000px rgba(200, 255, 255, 0);\r\n    height: 100vh;\r\n    width: 100%;\r\n    transform: translate(-150%);\r\n    display: flex;\r\n    flex-direction: column;\r\n    margin-left: -40px;\r\n    padding-left: 50px;\r\n    transition: transform 0.5s ease-in-out;\r\n    text-align: center;\r\n}\r\n\r\n.navbar .menu-items li {\r\n    margin-bottom: 1.2rem;\r\n    font-size: 1.5rem;\r\n    font-weight: 500;\r\n}\r\n\r\n.logo {\r\n    position: absolute;\r\n    top: 5px;\r\n    right: 15px;\r\n    font-size: 1.2rem;\r\n    color: #0e2431;\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .menu-items {\r\n    transform: translateX(0);\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .hamburger-lines .line1 {\r\n    transform: rotate(45deg);\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .hamburger-lines .line2 {\r\n    transform: scaleY(0);\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .hamburger-lines .line3 {\r\n    transform: rotate(-45deg);\r\n}\r\n\r\n.nav-container input[type=\"checkbox\"]:checked ~ .logo{\r\n    display: none;\r\n}\r\n\r\n\r\n.raceReset {\r\n    margin-top: 20px;\r\n    text-align: center;\r\n}\r\n\r\n#resetButton {\r\n    padding: 10px 15px;\r\n    background-color: #f44336;\r\n    color: white;\r\n    border: none;\r\n    border-radius: 5px;\r\n    cursor: pointer;\r\n}\r\n\r\n#resetButton:hover {\r\n    background-color: #d32f2f;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/yas.css b/yas.css
+--- a/yas.css	
++++ b/yas.css	
+@@ -34,143 +34,69 @@
+ /* Navbar styling */
+ 
+ 
+-.nav {
+-    max-width: 1050px;
+-    width: 90%;
+-    margin: auto;
+-}
+-
+-.navbar {
+-    width: 100%;
+-}
+-
+-.nav-container {
+-    display: flex;
+-    justify-content: space-between;
+-    align-items: center;
+-    height: 62px;
+-}
+-
+-.navbar .menu-items {
+-    display: flex;
++nav {
++    width: 300px;
++    background: white;
++    color: rgba(0, 0, 0, 0.87);
++    -webkit-clip-path: circle(24px at 30px 24px);
++    clip-path: circle(24px at 32px 24px);
++    -webkit-transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
++    transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
+ }
+ 
+-.navbar .nav-container li {
+-    list-style: none;
++nav:hover {
++    -webkit-transition-timing-function: ease-out;
++    transition-timing-function: ease-out;
++    -webkit-transition-duration: 0.75s;
++    transition-duration: 0.75s;
++    -webkit-clip-path: circle(390px at 225px 24px);
++    clip-path: circle(390px at 150px 24px);
+ }
+ 
+-.navbar .nav-container a {
+-    text-decoration: none;
+-    color: #0e2431;
+-    font-weight: 500;
+-    font-size: 1.2rem;
+-    padding: 0.7rem;
+-}
+-
+-.navbar .nav-container a:hover{
+-    font-weight: bolder;
+-}
+-
+-.nav-container {
++a {
+     display: block;
++    line-height: 50px;
++    padding: 0 20px;
++    color: inherit;
++    cursor: pointer;
++    -webkit-user-select: none;
++    -moz-user-select: none;
++    -ms-user-select: none;
++    user-select: none;
++}
++
++a:hover { background: #ffe082; }
++
++a:active { background: #ffca28; }
++
++.navicon {
++    padding: 23px 20px;
++    cursor: pointer;
++    -webkit-transform-origin: 32px 24px;
++    -ms-transform-origin: 32px 24px;
++    transform-origin: 32px 24px;
++}
++
++.navicon div {
+     position: relative;
+-    height: 60px;
++    width: 20px;
++    height: 2px;
++    background: rgba(0, 0, 0, 0.87);
+ }
+ 
+-.nav-container .checkbox {
+-    position: absolute;
++.navicon div:before,
++.navicon div:after {
+     display: block;
+-    height: 32px;
+-    width: 32px;
+-    top: 20px;
+-    left: 20px;
+-    z-index: 5;
+-    opacity: 0;
+-    cursor: pointer;
+-}
+-
+-.nav-container .hamburger-lines {
+-    display: block;
+-    height: 26px;
+-    width: 32px;
++    content: "";
++    width: 20px;
++    height: 2px;
++    background: rgba(0, 0, 0, 0.87);
+     position: absolute;
+-    top: 17px;
+-    left: 20px;
+-    z-index: 2;
+-    display: flex;
+-    flex-direction: column;
+-    justify-content: space-between;
+-}
+-
+-.nav-container .hamburger-lines .line {
+-    display: block;
+-    height: 4px;
+-    width: 100%;
+-    border-radius: 10px;
+-    background: #0e2431;
+-}
+-
+-.nav-container .hamburger-lines .line1 {
+-    transform-origin: 0% 0%;
+-    transition: transform 0.4s ease-in-out;
+-}
+-
+-.nav-container .hamburger-lines .line2 {
+-    transition: transform 0.2s ease-in-out;
+-}
+-
+-.nav-container .hamburger-lines .line3 {
+-    transform-origin: 0% 100%;
+-    transition: transform 0.4s ease-in-out;
+-}
+-
+-.navbar .menu-items {
+-    padding-top: 120px;
+-    box-shadow: inset 0 0 2000px rgba(200, 255, 255, 0);
+-    height: 100vh;
+-    width: 100%;
+-    transform: translate(-150%);
+-    display: flex;
+-    flex-direction: column;
+-    margin-left: -40px;
+-    padding-left: 50px;
+-    transition: transform 0.5s ease-in-out;
+-    text-align: center;
+-}
+-
+-.navbar .menu-items li {
+-    margin-bottom: 1.2rem;
+-    font-size: 1.5rem;
+-    font-weight: 500;
+-}
+-
+-.logo {
+-    position: absolute;
+-    top: 5px;
+-    right: 15px;
+-    font-size: 1.2rem;
+-    color: #0e2431;
+ }
+ 
+-.nav-container input[type="checkbox"]:checked ~ .menu-items {
+-    transform: translateX(0);
+-}
++.navicon div:before { top: -7px; }
+ 
+-.nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line1 {
+-    transform: rotate(45deg);
+-}
+-
+-.nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line2 {
+-    transform: scaleY(0);
+-}
+-
+-.nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
+-    transform: rotate(-45deg);
+-}
+-
+-.nav-container input[type="checkbox"]:checked ~ .logo{
+-    display: none;
+-}
++.navicon div:after { top: 7px; }
+ 
+ 
+ .raceReset {
+Index: kartingtown.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Oraken Karting Team</title>\r\n  <link rel=\"stylesheet\" href=\"kartingtown.css\">\r\n</head>\r\n<body>\r\n<nav>\r\n  <div class=\"navbar\">\r\n    <div class=\"nav nav-container\">\r\n      <input class=\"checkbox\" type=\"checkbox\" name=\"\" id=\"\" />\r\n      <div class=\"hamburger-lines\">\r\n        <span class=\"line line1\"></span>\r\n        <span class=\"line line2\"></span>\r\n        <span class=\"line line3\"></span>\r\n      </div>\r\n      <div class=\"logo\">\r\n        <h1>Oraken Racing</h1>\r\n      </div>\r\n      <div class=\"menu-items\">\r\n        <li><a href=\"home.html\">Home</a></li>\r\n        <li><a href=\"kartdrome.html\">Dubai Kartdrome</a></li>\r\n        <li><a href=\"yas.html\">Yas Kartzone</a></li>\r\n        <li><a href=\"kartingtown.html\">Karting Town</a></li>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</nav>\r\n\r\n<div class=\"container\">\r\n  <h2 id=\"track\">Karts-on-Track</h2>\r\n  <div id=\"kartsOnTrack\" class=\"section\">\r\n    <!-- Boxes for Karts-on-Track will be added by JavaScript -->\r\n  </div>\r\n  <h2 id=\"pit\">Karts-in-Pit</h2>\r\n  <div id=\"kartsInPit\" class=\"section\">\r\n    <!-- Boxes for Karts-in-Pit will be added by JavaScript -->\r\n  </div>\r\n\r\n  <div id=\"kartPerformance\" class=\"section\">\r\n    <h2>Kart-Performance</h2>\r\n    <div class=\"box\" style=\"background-color: purple;\"></div>\r\n    <div class=\"box\" style=\"background-color: green;\"></div>\r\n    <div class=\"box\" style=\"background-color: yellow;\"></div>\r\n    <div class=\"box\" style=\"background-color: red;\"></div>\r\n    <div class=\"box\" style=\"background-color: grey;\"></div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"raceReset\">\r\n  <button id=\"resetButton\">Click here to Reset</button>\r\n</div>\r\n<script src=\"kartingtown.js\"></script>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/kartingtown.html b/kartingtown.html
+--- a/kartingtown.html	
++++ b/kartingtown.html	
+@@ -8,25 +8,14 @@
+ </head>
+ <body>
+ <nav>
+-  <div class="navbar">
+-    <div class="nav nav-container">
+-      <input class="checkbox" type="checkbox" name="" id="" />
+-      <div class="hamburger-lines">
+-        <span class="line line1"></span>
+-        <span class="line line2"></span>
+-        <span class="line line3"></span>
+-      </div>
+-      <div class="logo">
+-        <h1>Oraken Racing</h1>
+-      </div>
+-      <div class="menu-items">
+-        <li><a href="home.html">Home</a></li>
+-        <li><a href="kartdrome.html">Dubai Kartdrome</a></li>
+-        <li><a href="yas.html">Yas Kartzone</a></li>
+-        <li><a href="kartingtown.html">Karting Town</a></li>
+-      </div>
+-    </div>
++  <div class="navicon">
++    <div></div>
+   </div>
++  <a href="index.html">Home</a>
++  <a href="kartdrome.html">Dubai Kartdrome</a>
++  <a href="kartingtown.html">Karting Town</a>
++  <a href="yas.html">Yas Kartzone</a>
++  <a>Team Members</a>
+ </nav>
+ 
+ <div class="container">
+Index: yas.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Oraken Karting Team</title>\r\n    <link rel=\"stylesheet\" href=\"yas.css\">\r\n</head>\r\n<body>\r\n<nav>\r\n    <div class=\"navbar\">\r\n        <div class=\"nav nav-container\">\r\n            <input class=\"checkbox\" type=\"checkbox\" name=\"\" id=\"\" />\r\n            <div class=\"hamburger-lines\">\r\n                <span class=\"line line1\"></span>\r\n                <span class=\"line line2\"></span>\r\n                <span class=\"line line3\"></span>\r\n            </div>\r\n            <div class=\"logo\">\r\n                <h1>Oraken Racing</h1>\r\n            </div>\r\n            <div class=\"menu-items\">\r\n                <li><a href=\"home.html\">Home</a></li>\r\n                <li><a href=\"kartdrome.html\">Dubai Kartdrome</a></li>\r\n                <li><a href=\"yas.html\">Yas Kartzone</a></li>\r\n                <li><a href=\"kartingtown.html\">Karting Town</a></li>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</nav>\r\n<div class=\"container\">\r\n    <div id=\"kartsOnTrack\" class=\"section\">\r\n        <h2>Karts-on-Track</h2>\r\n        <!-- Boxes for Karts-on-Track will be added by JavaScript -->\r\n    </div>\r\n\r\n    <div id=\"kartsInPit\" class=\"section\">\r\n        <h2>Karts-in-Pit</h2>\r\n        <!-- Boxes for Karts-in-Pit will be added by JavaScript -->\r\n    </div>\r\n\r\n    <div id=\"kartPerformance\" class=\"section\">\r\n        <h2>Kart-Performance</h2>\r\n        <div class=\"box\" style=\"background-color: purple;\"></div>\r\n        <div class=\"box\" style=\"background-color: green;\"></div>\r\n        <div class=\"box\" style=\"background-color: yellow;\"></div>\r\n        <div class=\"box\" style=\"background-color: red;\"></div>\r\n        <div class=\"box\" style=\"background-color: grey;\"></div>\r\n    </div>\r\n</div>\r\n<div class=\"raceReset\">\r\n    <button id=\"resetButton\">Click here to Reset</button>\r\n</div>\r\n<script src=\"kartdrome.js\"></script>\r\n<script src=\"yas.js\"></script>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/yas.html b/yas.html
+--- a/yas.html	
++++ b/yas.html	
+@@ -8,25 +8,14 @@
+ </head>
+ <body>
+ <nav>
+-    <div class="navbar">
+-        <div class="nav nav-container">
+-            <input class="checkbox" type="checkbox" name="" id="" />
+-            <div class="hamburger-lines">
+-                <span class="line line1"></span>
+-                <span class="line line2"></span>
+-                <span class="line line3"></span>
+-            </div>
+-            <div class="logo">
+-                <h1>Oraken Racing</h1>
+-            </div>
+-            <div class="menu-items">
+-                <li><a href="home.html">Home</a></li>
+-                <li><a href="kartdrome.html">Dubai Kartdrome</a></li>
+-                <li><a href="yas.html">Yas Kartzone</a></li>
+-                <li><a href="kartingtown.html">Karting Town</a></li>
+-            </div>
+-        </div>
++    <div class="navicon">
++        <div></div>
+     </div>
++    <a href="index.html">Home</a>
++    <a href="kartdrome.html">Dubai Kartdrome</a>
++    <a href="kartingtown.html">Karting Town</a>
++    <a href="yas.html">Yas Kartzone</a>
++    <a>Team Members</a>
+ </nav>
+ <div class="container">
+     <div id="kartsOnTrack" class="section">
+Index: home.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/home.html b/index.html
+rename from home.html
+rename to index.html
+--- a/home.html	
++++ b/index.html	
+@@ -3,7 +3,7 @@
+ <head>
+     <meta charset="UTF-8">
+     <title>Oraken Home Page</title>
+-    <link rel="stylesheet" href="home.css">
++    <link rel="stylesheet" href="index.css">
+ </head>
+ <body>
+ <div class="menu-container">
+@@ -23,7 +23,7 @@
+ 
+         <nav>
+             <ul class="menu-links">
+-                <li><a href="home.html">Home</a></li>
++                <li><a href="index.html">Home</a></li>
+                 <li><a href="###">Team Members</a></li>
+             </ul>
+             <ul class="menu-links">
+diff --git a/home.css b/index.css
+rename from home.css
+rename to index.css

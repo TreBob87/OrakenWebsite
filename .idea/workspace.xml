@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dc4d19f1-24b5-407c-8931-f8bb81311f6e" name="Changes" comment="added sorting functionality to database to save it across multiple devices" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="CSS File" />
+        <option value="JSX File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;searchQuery&quot;: &quot;OrakenWebsite&quot;,
+      &quot;state&quot;: &quot;OPEN&quot;,
+      &quot;assignee&quot;: &quot;TreBob87&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;searchQuery&quot;: &quot;OrakenWebsite&quot;,
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;TreBob87&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/TreBob87/OrakenWebsite.git&quot;,
+    &quot;accountId&quot;: &quot;dade7c40-0f30-45a5-9808-decfc8255808&quot;
+  }
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2YUWNeTvpxlINHbP1Qxsp11p9hL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JavaScript Debug.Login.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.kartdrome.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.kartingtown.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.login.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.yas.html.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.KartManager.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.KartManager.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.app.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.esbuild.config.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.index.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.kartUsage.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.kartdrome.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.kartingtown.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.login.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.reactTest.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.yas.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/gigabytepc/PhpstormProjects/Kart_Counter&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\gigabytepc\\AppData\\Local\\Programs\\PhpStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\gigabytepc\PhpstormProjects\Kart_Counter\Pictures" />
+      <recent name="C:\Users\gigabytepc\PhpstormProjects\Kart_Counter" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\gigabytepc\PhpstormProjects\Kart_Counter\Pictures" />
+      <recent name="C:\Users\gigabytepc\PhpstormProjects\Kart_Counter" />
+      <recent name="C:\Users\gigabytepc\PhpstormProjects\Kart_Counter\Kartdrome" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Node.js.kartUsage.js">
+    <configuration name="KartManager.jsx" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/KartManager.jsx" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="kartUsage.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/kartUsage.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.kartUsage.js" />
+        <item itemvalue="Node.js.KartManager.jsx" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PS-243.26053.13" />
+        <option value="bundled-php-predefined-a98d8de5180a-1ec7b7818973-com.jetbrains.php.sharedIndexes-PS-243.26053.13" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dc4d19f1-24b5-407c-8931-f8bb81311f6e" name="Changes" comment="" />
+      <created>1700580599826</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1700580599826</updated>
+      <workItem from="1700580600862" duration="11426000" />
+      <workItem from="1700638143776" duration="18394000" />
+      <workItem from="1707476631320" duration="7996000" />
+      <workItem from="1707655231377" duration="7564000" />
+      <workItem from="1707816358707" duration="12252000" />
+      <workItem from="1707903509784" duration="12238000" />
+      <workItem from="1708078496697" duration="807000" />
+      <workItem from="1708416669228" duration="11651000" />
+      <workItem from="1708511607303" duration="759000" />
+      <workItem from="1708593311047" duration="2619000" />
+      <workItem from="1709204586285" duration="3197000" />
+      <workItem from="1709717525551" duration="10000" />
+      <workItem from="1711392732958" duration="2446000" />
+      <workItem from="1711460609980" duration="2668000" />
+      <workItem from="1711626284120" duration="11914000" />
+      <workItem from="1711703597290" duration="10709000" />
+      <workItem from="1711795950286" duration="2902000" />
+      <workItem from="1715878234852" duration="6380000" />
+      <workItem from="1715939143123" duration="7000" />
+      <workItem from="1715941471921" duration="4391000" />
+      <workItem from="1716292220786" duration="8000" />
+      <workItem from="1724665613444" duration="1766000" />
+      <workItem from="1724667592037" duration="115000" />
+      <workItem from="1724667778946" duration="19111000" />
+      <workItem from="1724769462313" duration="2508000" />
+      <workItem from="1724833793848" duration="13742000" />
+      <workItem from="1725009199821" duration="8636000" />
+      <workItem from="1725030553994" duration="3207000" />
+      <workItem from="1725276255561" duration="1787000" />
+      <workItem from="1725282978134" duration="3961000" />
+      <workItem from="1726484395761" duration="15000" />
+      <workItem from="1726491516003" duration="603000" />
+      <workItem from="1727291075387" duration="604000" />
+      <workItem from="1734002151730" duration="10121000" />
+      <workItem from="1742289109414" duration="56000" />
+      <workItem from="1742289328236" duration="223000" />
+    </task>
+    <task id="LOCAL-00001" summary="Navbar update">
+      <option name="closed" value="true" />
+      <created>1700657735043</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1700657735043</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Navbar update">
+      <option name="closed" value="true" />
+      <created>1700658069999</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1700658069999</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Navbar update">
+      <option name="closed" value="true" />
+      <created>1700658574358</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1700658574358</updated>
+    </task>
+    <task id="LOCAL-00004" summary="width update">
+      <option name="closed" value="true" />
+      <created>1700659353133</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1700659353133</updated>
+    </task>
+    <task id="LOCAL-00005" summary="width update">
+      <option name="closed" value="true" />
+      <created>1700659386330</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1700659386330</updated>
+    </task>
+    <task id="LOCAL-00006" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707484451749</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1707484451749</updated>
+    </task>
+    <task id="LOCAL-00007" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707484637695</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1707484637695</updated>
+    </task>
+    <task id="LOCAL-00008" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707484702960</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1707484702960</updated>
+    </task>
+    <task id="LOCAL-00009" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707662607798</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1707662607798</updated>
+    </task>
+    <task id="LOCAL-00010" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707816846188</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1707816846188</updated>
+    </task>
+    <task id="LOCAL-00011" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707817173188</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1707817173188</updated>
+    </task>
+    <task id="LOCAL-00012" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707818222378</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1707818222378</updated>
+    </task>
+    <task id="LOCAL-00013" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707827416435</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1707827416435</updated>
+    </task>
+    <task id="LOCAL-00014" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707904585114</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1707904585114</updated>
+    </task>
+    <task id="LOCAL-00015" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707906650839</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1707906650839</updated>
+    </task>
+    <task id="LOCAL-00016" summary="width update">
+      <option name="closed" value="true" />
+      <created>1707913834076</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1707913834076</updated>
+    </task>
+    <task id="LOCAL-00017" summary="width update firebase integration">
+      <option name="closed" value="true" />
+      <created>1711629282707</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1711629282707</updated>
+    </task>
+    <task id="LOCAL-00018" summary="width update firebase integration">
+      <option name="closed" value="true" />
+      <created>1711629774088</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1711629774088</updated>
+    </task>
+    <task id="LOCAL-00019" summary="width update firebase integration">
+      <option name="closed" value="true" />
+      <created>1711634554026</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1711634554026</updated>
+    </task>
+    <task id="LOCAL-00020" summary="width update firebase integration">
+      <option name="closed" value="true" />
+      <created>1711634687823</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1711634687823</updated>
+    </task>
+    <task id="LOCAL-00021" summary="width update meta tag change in kartdrome.html">
+      <option name="closed" value="true" />
+      <created>1711635292325</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1711635292325</updated>
+    </task>
+    <task id="LOCAL-00022" summary="width update meta tag change in kartusage">
+      <option name="closed" value="true" />
+      <created>1711636696579</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1711636696579</updated>
+    </task>
+    <task id="LOCAL-00023" summary="width update meta tag change in kartusage">
+      <option name="closed" value="true" />
+      <created>1711638416302</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1711638416302</updated>
+    </task>
+    <task id="LOCAL-00024" summary="width update changes in yas.js and yas.css">
+      <option name="closed" value="true" />
+      <created>1711711484448</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1711711484448</updated>
+    </task>
+    <task id="LOCAL-00025" summary="width update changes in kartingtown">
+      <option name="closed" value="true" />
+      <created>1711714111661</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1711714111661</updated>
+    </task>
+    <task id="LOCAL-00026" summary="width update changes in kartUsage">
+      <option name="closed" value="true" />
+      <created>1711798127758</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1711798127758</updated>
+    </task>
+    <task id="LOCAL-00027" summary="width update changes in kartdrome.js to box events">
+      <option name="closed" value="true" />
+      <created>1724677869831</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1724677869831</updated>
+    </task>
+    <task id="LOCAL-00028" summary="width update changes to kartdrome.js to add replace kart functionality and quali mode">
+      <option name="closed" value="true" />
+      <created>1724771309258</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1724771309258</updated>
+    </task>
+    <task id="LOCAL-00029" summary="width update changes to styling and added security">
+      <option name="closed" value="true" />
+      <created>1725015576582</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1725015576582</updated>
+    </task>
+    <task id="LOCAL-00030" summary="width update changes to styling and added security">
+      <option name="closed" value="true" />
+      <created>1725015854630</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1725015854630</updated>
+    </task>
+    <task id="LOCAL-00031" summary="width update changes to styling and added security">
+      <option name="closed" value="true" />
+      <created>1725016210130</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1725016210130</updated>
+    </task>
+    <task id="LOCAL-00032" summary="width update changes to user select">
+      <option name="closed" value="true" />
+      <created>1725017829360</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1725017829360</updated>
+    </task>
+    <task id="LOCAL-00033" summary="added pitlane order functionality button, made changes to login css">
+      <option name="closed" value="true" />
+      <created>1725277455391</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1725277455391</updated>
+    </task>
+    <task id="LOCAL-00034" summary="changed toggleSort button to input switch">
+      <option name="closed" value="true" />
+      <created>1725285216163</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1725285216163</updated>
+    </task>
+    <task id="LOCAL-00035" summary="added updateSortOrder to window load function">
+      <option name="closed" value="true" />
+      <created>1725285617918</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1725285617918</updated>
+    </task>
+    <task id="LOCAL-00036" summary="added sorting functionality to database to save it across multiple devices">
+      <option name="closed" value="true" />
+      <created>1725286544701</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1725286544701</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Navbar update" />
+    <MESSAGE value="width update" />
+    <MESSAGE value="width update firebase integration" />
+    <MESSAGE value="width update meta tag change in kartdrome.html" />
+    <MESSAGE value="width update meta tag change in kartusage" />
+    <MESSAGE value="width update changes in yas.js and yas.css" />
+    <MESSAGE value="width update changes in kartingtown" />
+    <MESSAGE value="width update changes in kartUsage" />
+    <MESSAGE value="width update changes in kartdrome.js to box events" />
+    <MESSAGE value="width update changes to kartdrome.js to add replace kart functionality and quali mode" />
+    <MESSAGE value="width update changes to styling and added security" />
+    <MESSAGE value="width update changes to user select" />
+    <MESSAGE value="added pitlane order functionality button, made changes to login css" />
+    <MESSAGE value="changed toggleSort button to input switch" />
+    <MESSAGE value="added updateSortOrder to window load function" />
+    <MESSAGE value="added sorting functionality to database to save it across multiple devices" />
+    <option name="LAST_COMMIT_MESSAGE" value="added sorting functionality to database to save it across multiple devices" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

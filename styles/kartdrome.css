@@ -1,0 +1,525 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body {
+    font-family: "Poppins", sans-serif;
+    /* background-image: url("Pictures/Kartdrome.jpg"); */
+    background-color: #2E2F2F;
+    background-size: 100%;
+    box-sizing: border-box;
+    background-position: center;
+    margin: 0; /* Ensure body has no margin */
+    user-select: none;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    padding-top: 50px;
+}
+
+.section {
+    display: flex; /* Use flexbox to arrange items */
+    justify-content: center; /* Center flex items horizontally */
+    flex-wrap: wrap; /* Allow items to wrap as needed */
+    margin-bottom: 20px;
+}
+
+#kartsInPit .box {
+    width: 12vw;
+    height: 8vh;
+}
+
+.box {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 8vw;
+    height: 5vh;
+    margin: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 600px) {
+    #kartsInPit .box {
+        width: 16vw;
+        height: 8vh;
+    }
+    .box {
+        width: 14vw;
+    }
+    .container {
+        width: 100%;
+    }
+}
+
+.highlighted {
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 10px #FFD700;
+}
+
+#kartsOnTrack {
+    background-color: #051014;
+    border-radius: 20px;
+    border-width: 10px;
+}
+
+#kartsInPit {
+    background-color: #051014;
+    border-radius: 20px;
+    border-width: 10px;
+}
+
+/* Navbar styling */
+nav {
+    position: absolute;
+    z-index: 2;
+    width: 300px;
+    background: white;
+    color: rgba(0, 0, 0, 0.87);
+    -webkit-clip-path: circle(24px at 30px 24px);
+    clip-path: circle(24px at 32px 24px);
+    -webkit-transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
+    transition: -webkit-clip-path 0.5625s, clip-path 0.375s;
+    border-radius: 5px;
+}
+
+nav:hover {
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+    -webkit-transition-duration: 0.75s;
+    transition-duration: 0.75s;
+    -webkit-clip-path: circle(390px at 225px 24px);
+    clip-path: circle(390px at 150px 24px);
+    border-radius: 5px;
+}
+
+a {
+    display: block;
+    line-height: 50px;
+    padding: 0 20px;
+    color: inherit;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+a:hover { 
+    background: #ACBDBA; 
+}
+
+a:active { 
+    background: #2E2F2F; 
+}
+
+.navicon {
+    padding: 23px 20px;
+    cursor: pointer;
+    -webkit-transform-origin: 32px 24px;
+    -ms-transform-origin: 32px 24px;
+    transform-origin: 32px 24px;
+}
+
+.navicon div {
+    position: relative;
+    width: 20px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.87);
+}
+
+.navicon div:before,
+.navicon div:after {
+    display: block;
+    content: "";
+    width: 20px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.87);
+    position: absolute;
+}
+
+.navicon div:before { 
+    top: -7px; 
+}
+
+.navicon div:after { 
+    top: 7px; 
+}
+
+.raceReset {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#resetButton {
+    padding: 10px 15px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#resetButton:hover {
+    background-color: #d32f2f;
+}
+
+/* New Undo Button Styling */
+#undoSwapButton {
+    padding: 10px 15px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#undoSwapButton:hover {
+    background-color: #1976D2;
+}
+
+.qualiMode h2 {
+    display: flex;
+    justify-content: center;
+    color: #ACBDBA;
+}
+
+.container h2 {
+    display: flex;
+    justify-content: center;
+    color: #ACBDBA;
+}
+
+.switch {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    background: linear-gradient(to bottom, #eeeeee, #FFFFFF 25px);
+    border-radius: 18px;
+    box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    box-sizing: content-box;
+}
+.switch-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    box-sizing: content-box;
+}
+.switch-label {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: 10px;
+    text-transform: uppercase;
+    background: #eceeef;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+    box-sizing: content-box;
+}
+.switch-label:before, .switch-label:after {
+    position: absolute;
+    top: 50%;
+    margin-top: -.5em;
+    line-height: 1;
+    transition: inherit;
+    box-sizing: content-box;
+}
+.switch-label:before {
+    content: attr(data-off);
+    right: 11px;
+    color: #aaaaaa;
+    text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+}
+.switch-label:after {
+    content: attr(data-on);
+    left: 11px;
+    color: #FFFFFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+}
+.switch-input:checked ~ .switch-label {
+    background: #2ABFAB;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+.switch-input:checked ~ .switch-label:before {
+    opacity: 0;
+}
+.switch-input:checked ~ .switch-label:after {
+    opacity: 1;
+}
+.switch-handle {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+    border-radius: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+.switch-handle:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -6px 0 0 -6px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+    border-radius: 6px;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+}
+.switch-input:checked ~ .switch-handle {
+    left: 74px;
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Transition */
+.switch-label, .switch-handle {
+    transition: all 0.3s ease;
+}
+
+/* Sort Button Styles */
+.sortButton {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    background: linear-gradient(to bottom, #eeeeee, #FFFFFF 25px);
+    border-radius: 18px;
+    box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    box-sizing: content-box;
+    margin-bottom: 5%;
+}
+.sortButton-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    box-sizing: content-box;
+}
+.sortButton-label {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: 10px;
+    text-transform: uppercase;
+    background: red;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+    box-sizing: content-box;
+}
+.sortButton-label:before, .sortButton-label:after {
+    position: absolute;
+    top: 50%;
+    margin-top: -.5em;
+    line-height: 1;
+    transition: inherit;
+    box-sizing: content-box;
+}
+.sortButton-label:before {
+    content: attr(data-off);
+    right: 11px;
+    color: #aaaaaa;
+    text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+}
+.sortButton-label:after {
+    content: attr(data-on);
+    left: 11px;
+    color: #FFFFFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+}
+.sortButton-input:checked ~ .sortButton-label {
+    background: #2ABFAB;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+.sortButton-input:checked ~ .sortButton-label:before {
+    opacity: 0;
+}
+.sortButton-input:checked ~ .sortButton-label:after {
+    opacity: 1;
+}
+.sortButton-handle {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+    border-radius: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+.sortButton-handle:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -6px 0 0 -6px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+    border-radius: 6px;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+}
+.sortButton-input:checked ~ .sortButton-handle {
+    left: 74px;
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Transition */
+.sortButton-label, .sortButton-handle {
+    transition: all 0.3s ease;
+}
+
+/* Popup Styles for Team Usage */
+#teamUsagePopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none; /* Initially hidden */
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+}
+
+#teamUsageContent {
+    background-color: #ACBDBA;
+    padding: 20px;
+    border-radius: 8px;
+    max-height: 70vh; /* Maximum height for scrolling */
+    overflow-y: auto;
+    width: 300px;
+    color: white;
+}
+
+#teamUsageContent h3 {
+    margin-top: 0;
+    text-align: center;
+}
+
+#teamUsageList {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#teamUsageList li {
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Close button for the popup */
+#closeTeamUsagePopup {
+    display: block;
+    margin: 10px auto 0;
+    padding: 8px 12px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#closeTeamUsagePopup:hover {
+    background-color: #d32f2f;
+}
+
+/* New Styling for Replacement and Undo Controls */
+
+/* Replace Kart Button */
+
+.replaceKart {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#replaceKartButton {
+    padding: 10px 15px;
+    background-color: #8f1a1a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+#replaceKartButton:hover {
+    background-color: #388E3C;
+}
+
+/* Kart Selection Container */
+#kartSelectionContainer {
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #d9dddf;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+/* Confirm Replacement Button */
+#confirmReplacementButton {
+    padding: 10px 15px;
+    background-color: #FF9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+#confirmReplacementButton:hover {
+    background-color: #F57C00;
+}
+#cancelButton {
+    background-color: red;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+#cancelButton:hover {
+    background-color: darkred;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    background: #7a7878;
+    padding: 20px;
+    border-radius: 8px;
+    max-height: 80%;
+    overflow: auto;
+}

@@ -3,7 +3,7 @@
 @import url(https://fonts.googleapis.com/css?family=Oswald:400,300);
 body {
     font-family: "Poppins", sans-serif;
-    background-image: url("Pictures/Oraken_Black.jpg");
+    background-image: url("../Pictures/Oraken_Black.jpg");
     background-size: cover;
     user-select: none;
 }

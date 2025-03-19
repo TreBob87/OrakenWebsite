@@ -16,25 +16,26 @@ let lastSwap = null;        // Global variable to store last swap data
 
 window.onload = async function() {
     await loadTeamCarUsage();
+    await loadKartUsage();
 
     // Load counts from Firebase database
-    const { kartsOnTrackCount, kartsInPitCount } = await loadKartCounts();
-
+    const { kartsOnTrackCountP, kartsInPitCountP } = await loadKartCounts();
+    
     // Use the loaded counts to create boxes
-    createBoxes('kartsOnTrack', kartsOnTrackCount);
-    createBoxes('kartsInPit', kartsInPitCount);
+    createBoxes('kartsOnTrackP', kartsOnTrackCountP);
+    createBoxes('kartsInPitP', kartsInPitCountP);
     await loadSortOrderState();
     await loadBoxColors();
 
     // Add event listeners
-    document.getElementById('kartPerformance').addEventListener('click', pickColor);
-    document.getElementById('kartsOnTrack').addEventListener('click', handleBoxClick);
-    document.getElementById('kartsInPit').addEventListener('click', handleBoxClick);
+    document.getElementById('kartPerformanceP').addEventListener('click', pickColor);
+    document.getElementById('kartsOnTrackP').addEventListener('click', handleBoxClick);
+    document.getElementById('kartsInPitP').addEventListener('click', handleBoxClick);
     document.getElementById('resetButton').addEventListener('click', resetColors);
     document.getElementById('undoSwapButton').addEventListener('click', undoLastSwap);
 
     document.addEventListener('click', function(event) {
-        if (!event.target.classList.contains('box')) {
+        if (!event.target.classList.contains('boxP')) {
             if (currentlyHighlighted) {
                 currentlyHighlighted.classList.remove('highlighted');
                 currentlyHighlighted = null;
@@ -51,20 +52,20 @@ window.onload = async function() {
 };
 
 async function loadKartCounts() {
-    const kartsOnTrackRef = ref(database, 'kartsOnTrackCount');
-    const kartsInPitRef = ref(database, 'kartsInPitCount');
+    const kartsOnTrackRef = ref(database, 'kartsOnTrackCountP');
+    const kartsInPitRef = ref(database, 'kartsInPitCountP');
 
     try {
         const kartsOnTrackSnapshot = await get(kartsOnTrackRef);
         const kartsInPitSnapshot = await get(kartsInPitRef);
 
-        const kartsOnTrackCount = kartsOnTrackSnapshot.val() || 45;
-        const kartsInPitCount = kartsInPitSnapshot.val() || 5;
+        const kartsOnTrackCountP = kartsOnTrackSnapshot.val() || 45;
+        const kartsInPitCountP = kartsInPitSnapshot.val() || 5;
 
-        return { kartsOnTrackCount, kartsInPitCount };
+        return { kartsOnTrackCountP, kartsInPitCountP };
     } catch (error) {
         console.error('Error fetching kart counts from Firebase:', error);
-        return { kartsOnTrackCount: 45, kartsInPitCount: 5 };
+        return { kartsOnTrackCountP: 45, kartsInPitCountP: 5 };
     }
 }
 
@@ -73,18 +74,21 @@ let replacementIdCounter = 1;
 let checked;
 let selectedColor = '';
 let lastClickedBox = { track: null, pit: null };
-let teamCarUsage = {}; // Object to track car usage by teams
+let teamCarUsage = {};
+let kartUsage = {};
+const qualiModeCheckbox = document.getElementById('qualiModeToggle');
 
 const replaceKartButton = document.getElementById('replaceKartButton');
 const replaceKartPopup = document.getElementById('replaceKartPopup');
+const cancelReplacementButton = document.getElementById('cancelButton')
 const kartSelectionContainer = document.getElementById('kartSelectionContainer');
 const confirmReplacementButton = document.getElementById('confirmReplacementButton');
 
 function createBoxes(containerId, count) {
     const container = document.getElementById(containerId);
     let startId = 0;
-    if (containerId === 'kartsInPit') {
-        const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box');
+    if (containerId === 'kartsInPitP') {
+        const kartsOnTrack = document.querySelectorAll('#kartsOnTrackP .boxP');
         if (kartsOnTrack.length > 0) {
             startId = parseInt(kartsOnTrack[kartsOnTrack.length - 1].getAttribute('data-car-id'));
         }
@@ -92,24 +96,28 @@ function createBoxes(containerId, count) {
 
     for (let i = 1; i < count + 1; i++) {
         const box = document.createElement('div');
-        box.classList.add('box');
+        box.classList.add('boxP');
         const carId = startId + i;
         box.id = `${containerId}-${carId}`;
-        box.setAttribute('data-car-id', carId.toString());
         box.style.backgroundColor = 'grey';
+        // Attach long press listener for team usage popup (supports desktop & mobile)
+        addLongPressListener(box);
+        
 
-        if (containerId === 'kartsOnTrack') {
+        if (containerId === 'kartsOnTrackP') {
             box.textContent = i;
+            box.setAttribute('data-car-id', carId.toString());
+            
             // Initialize or update the team's initial car in teamCarUsage
             if (!teamCarUsage[i]) {
                 teamCarUsage[i] = [carId.toString()];
             }
-            // Attach long press listener for team usage popup (supports desktop & mobile)
-            addLongPressListener(box);
+            
         } else {
             box.textContent = i;
             box.style.fontWeight = 'bold';
             box.style.textDecoration = 'underline';
+            box.setAttribute('data-car-id',"P" + carId.toString());
         }
 
         container.appendChild(box);
@@ -118,9 +126,9 @@ function createBoxes(containerId, count) {
 }
 
 async function loadBoxColors() {
-    const boxes = document.querySelectorAll('.box');
+    const boxes = document.querySelectorAll('.boxP');
     boxes.forEach(box => {
-        const boxRef = ref(database, 'boxColors/' + box.id);
+        const boxRef = ref(database, 'boxColorsP/' + box.id);
         onValue(boxRef, (snapshot) => {
             if (snapshot.exists()) {
                 box.style.backgroundColor = snapshot.val();
@@ -130,7 +138,7 @@ async function loadBoxColors() {
 }
 
 async function saveBoxColor(box) {
-    const boxRef = ref(database, 'boxColors/' + box.id);
+    const boxRef = ref(database, 'boxColorsP/' + box.id);
     await set(boxRef, box.style.backgroundColor);
 }
 
@@ -160,7 +168,7 @@ function handleBoxClick(event) {
         skipNextClick = false;
         return;
     }
-    if (event.target.classList.contains('box')) {
+    if (event.target.classList.contains('boxP')) {
         const box = event.target;
         if (navigator.vibrate) {
             navigator.vibrate(50);
@@ -179,7 +187,7 @@ function handleBoxClick(event) {
             box.classList.add('highlighted');
             currentlyHighlighted = box;
         }
-        if (selectedColor && event.target.parentNode.id === 'kartsInPit') {
+        if (selectedColor && event.target.parentNode.id === 'kartsInPitP') {
             box.style.backgroundColor = selectedColor;
             saveBoxColor(box);
             selectedColor = '';
@@ -190,7 +198,7 @@ function handleBoxClick(event) {
             }
             return;
         }
-        if (selectedColor && event.target.parentNode.id === 'kartsOnTrack') {
+        if (selectedColor && event.target.parentNode.id === 'kartsOnTrackP') {
             box.style.backgroundColor = selectedColor;
             saveBoxColor(box);
             if (!checked) {
@@ -211,9 +219,9 @@ function handleBoxClick(event) {
             return;
         }
         const parentID = box.parentNode.id;
-        if (parentID === 'kartsOnTrack') {
+        if (parentID === 'kartsOnTrackP') {
             lastClickedBox.track = box;
-        } else if (parentID === 'kartsInPit') {
+        } else if (parentID === 'kartsInPitP') {
             lastClickedBox.pit = box;
         }
         if (lastClickedBox.track && lastClickedBox.pit) {
@@ -238,19 +246,19 @@ function handleBoxClick(event) {
 async function resetColors() {
     if (confirm('Are you sure you want to reset all colors and change the number of karts?')) {
         try {
-            const kartsOnTrackCount = parseInt(prompt("Enter the number of Karts-on-Track:", "45"), 10);
-            const kartsInPitCount = parseInt(prompt("Enter the number of Karts-in-Pit:", "5"), 10);
-            const validKartsOnTrackCount = isNaN(kartsOnTrackCount) ? 45 : kartsOnTrackCount;
-            const validKartsInPitCount = isNaN(kartsInPitCount) ? 5 : kartsInPitCount;
-            await set(ref(database, 'kartsOnTrackCount'), validKartsOnTrackCount);
-            await set(ref(database, 'kartsInPitCount'), validKartsInPitCount);
-            await remove(ref(database, 'boxColors'));
+            const kartsOnTrackCountP = parseInt(prompt("Enter the number of Karts-on-Track:", "45"), 10);
+            const kartsInPitCountP = parseInt(prompt("Enter the number of Karts-in-Pit:", "5"), 10);
+            const validKartsOnTrackCount = isNaN(kartsOnTrackCountP) ? 45 : kartsOnTrackCountP;
+            const validKartsInPitCount = isNaN(kartsInPitCountP) ? 5 : kartsInPitCountP;
+            await set(ref(database, 'kartsOnTrackCountP'), validKartsOnTrackCount);
+            await set(ref(database, 'kartsInPitCountP'), validKartsInPitCount);
+            await remove(ref(database, 'boxColorsP'));
             teamCarUsage = {};
             await saveTeamCarUsage();
-            document.getElementById('kartsOnTrack').innerHTML = '';
-            document.getElementById('kartsInPit').innerHTML = '';
-            createBoxes('kartsOnTrack', validKartsOnTrackCount);
-            createBoxes('kartsInPit', validKartsInPitCount);
+            document.getElementById('kartsOnTrackP').innerHTML = '';
+            document.getElementById('kartsInPitP').innerHTML = '';
+            createBoxes('kartsOnTrackP', validKartsOnTrackCount);
+            createBoxes('kartsInPitP', validKartsInPitCount);
             replacementIdCounter = 1;
         } catch (error) {
             console.error('Failed to reset colors:', error);
@@ -260,11 +268,11 @@ async function resetColors() {
 
 async function loadTeamCarUsage() {
     try {
-        const teamCarUsageRef = ref(database, 'teamCarUsage');
+        const teamCarUsageRef = ref(database, 'teamCarUsageP');
         const snapshot = await get(teamCarUsageRef);
         if (snapshot.exists()) {
             teamCarUsage = snapshot.val();
-            console.log('Team Car Usage:', teamCarUsage);
+            console.log('Team Kart Usage:', teamCarUsage);
         } else {
             console.log('No team car usage data available');
             teamCarUsage = {};
@@ -276,7 +284,7 @@ async function loadTeamCarUsage() {
 
 async function saveTeamCarUsage() {
     try {
-        const teamCarUsageRef = ref(database, 'teamCarUsage');
+        const teamCarUsageRef = ref(database, 'teamCarUsageP');
         await set(teamCarUsageRef, teamCarUsage);
     } catch (error) {
         console.error('Failed to save team car usage:', error);
@@ -311,18 +319,23 @@ function swapColorsAndIds() {
             let tempColor = trackBox.style.backgroundColor;
             trackBox.style.backgroundColor = pitBox.style.backgroundColor;
             pitBox.style.backgroundColor = tempColor;
+            const teamNumber = trackBox.textContent.trim();
+            const pitKartId = pitBox.getAttribute('data-car-id');
 
             // Swap data-car-id values
             if (!checked) {
                 let tempId = trackBox.getAttribute('data-car-id');
                 trackBox.setAttribute('data-car-id', pitBox.getAttribute('data-car-id'));
                 pitBox.setAttribute('data-car-id', tempId);
-                const teamNumber = trackBox.textContent;
+                console.log(teamNumber, trackBox.getAttribute('data-car-id'))
+                addKartUsage(pitKartId, teamNumber)
+                
                 if (!teamCarUsage[teamNumber]) {
                     teamCarUsage[teamNumber] = [];
                 }
                 // Append new usage entry to the team's history
                 teamCarUsage[teamNumber].push(trackBox.getAttribute('data-car-id') + " " + trackBox.style.backgroundColor + " at " + new Date().toLocaleTimeString());
+                
             }
             saveBoxColor(trackBox);
             saveBoxColor(pitBox);
@@ -379,39 +392,31 @@ function undoLastSwap() {
  */
 function addLongPressListener(box) {
     let timer;
-    let longPressTriggered = false;
-    const longPressDuration = 1000; // 1 second
+    const duration = 1000;
 
-    // Mouse events for desktop
-    box.addEventListener('mousedown', function(e) {
-        longPressTriggered = false;
+    const startPress = () => {
         timer = setTimeout(() => {
-            longPressTriggered = true;
-            showTeamUsage(box.textContent);
-        }, longPressDuration);
-    });
-    box.addEventListener('mouseup', function(e) {
-        clearTimeout(timer);
-    });
-    box.addEventListener('mouseleave', function(e) {
-        clearTimeout(timer);
-    });
+            const isPitLane = box.parentNode.id === 'kartsInPitP';
+            const kartId = box.getAttribute('data-car-id');
 
-    // Touch events for mobile (note: e.preventDefault() removed)
-    box.addEventListener('touchstart', function(e) {
-        longPressTriggered = false;
-        timer = setTimeout(() => {
-            longPressTriggered = true;
-            showTeamUsage(box.textContent);
-        }, longPressDuration);
-        // Removed e.preventDefault() so that short taps still trigger click events.
-    });
-    box.addEventListener('touchend', function(e) {
-        clearTimeout(timer);
-    });
-    box.addEventListener('touchcancel', function(e) {
-        clearTimeout(timer);
-    });
+            console.log("Long-pressed box details:", { isPitLane, kartId });
+
+            if (isPitLane) {
+                showLastUsedTeamForPitKart(kartId);
+            } else {
+                showTeamUsage(box.textContent.trim());
+            }
+        }, duration);
+    };
+
+    const cancelPress = () => clearTimeout(timer);
+
+    box.addEventListener('mousedown', startPress);
+    box.addEventListener('mouseup', cancelPress);
+    box.addEventListener('mouseleave', cancelPress);
+    box.addEventListener('touchstart', startPress, {passive: true});
+    box.addEventListener('touchend', cancelPress);
+    box.addEventListener('touchcancel', cancelPress);
 }
 
 
@@ -435,24 +440,22 @@ function showTeamUsage(teamNumber) {
 }
 // --- End Updated Functionality ---
 
-document.addEventListener('DOMContentLoaded', function () {
-    const qualiModeCheckbox = document.querySelector('#qualiMode .switch-input');
-    qualiModeCheckbox.addEventListener('change', function () {
-        if (qualiModeCheckbox.checked) {
-            checked = true;
-        } else {
-            checked = false;
-            const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box');
-            kartsOnTrack.forEach((kart) => teamCarUsage[kart.textContent][teamCarUsage[kart.getAttribute('data-car-id')].length - 1] = kart.getAttribute('data-car-id') + " " + kart.style.backgroundColor);
-            saveTeamCarUsage();
-        }
-    });
+
+qualiModeCheckbox.addEventListener('change', function () {
+    if (qualiModeCheckbox.checked) {
+        checked = true;
+    } else {
+        checked = false;
+        const kartsOnTrack = document.querySelectorAll('#kartsOnTrackP .boxP');
+        kartsOnTrack.forEach((kart) => teamCarUsage[kart.textContent][teamCarUsage[kart.getAttribute('data-car-id')].length - 1] = kart.getAttribute('data-car-id') + " " + kart.style.backgroundColor);
+        saveTeamCarUsage();
+    }
 });
 
 replaceKartButton.addEventListener('click', function () {
     kartSelectionContainer.innerHTML = '';
-    const kartsOnTrack = document.querySelectorAll('#kartsOnTrack .box');
-    const kartsInPit = document.querySelectorAll('#kartsInPit .box');
+    const kartsOnTrack = document.querySelectorAll('#kartsOnTrackP .boxP');
+    const kartsInPit = document.querySelectorAll('#kartsInPitP .boxP');
     kartsOnTrack.forEach(kart => {
         const kartOption = document.createElement('div');
         kartOption.classList.add('kart-option');
@@ -519,11 +522,11 @@ let isAscending = true;
 function updateSortOrder() {
     const sortModeSwitch = document.querySelector('#sortMode .sortButton-input');
     isAscending = sortModeSwitch.checked;
-    const kartsInPitContainer = document.getElementById('kartsInPit');
-    const boxes = Array.from(kartsInPitContainer.getElementsByClassName('box'));
+    const kartsInPitContainer = document.getElementById('kartsInPitP');
+    const boxes = Array.from(kartsInPitContainer.getElementsByClassName('boxP'));
     boxes.sort((a, b) => {
-        const idA = parseInt(a.getAttribute('data-car-id'));
-        const idB = parseInt(b.getAttribute('data-car-id'));
+        const idA = parseInt(a.textContent, 10);
+        const idB = parseInt(b.textContent, 10);
         return isAscending ? idA - idB : idB - idA;
     });
     kartsInPitContainer.innerHTML = '';
@@ -534,7 +537,7 @@ document.querySelector('#sortMode .sortButton-input').addEventListener('change',
 
 async function saveSortOrderState(isAscending) {
     try {
-        const sortOrderRef = ref(database, 'sortOrder');
+        const sortOrderRef = ref(database, 'sortOrderP');
         await set(sortOrderRef, { isAscending });
     } catch (error) {
         console.error('Failed to save sort order state:', error);
@@ -549,7 +552,7 @@ document.querySelector('#sortMode .sortButton-input').addEventListener('change',
 
 async function loadSortOrderState() {
     try {
-        const sortOrderRef = ref(database, 'sortOrder');
+        const sortOrderRef = ref(database, 'sortOrderP');
         const snapshot = await get(sortOrderRef);
         if (snapshot.exists()) {
             const data = snapshot.val();
@@ -562,4 +565,58 @@ async function loadSortOrderState() {
     } catch (error) {
         console.error('Failed to load sort order state:', error);
     }
+}
+
+// ✅ Cancel Replacement (Closes Popup)
+cancelReplacementButton.addEventListener('click', () => {
+    selectedKartBox = null; // Reset selection
+    replaceKartPopup.style.display = 'none';
+});
+
+// Close popup if clicking outside
+document.addEventListener('click', (event) => {
+    if (replaceKartPopup.style.display === 'block' &&
+        !replaceKartPopup.contains(event.target) &&
+        !replaceKartButton.contains(event.target)) {
+        replaceKartPopup.style.display = 'none';
+    }
+});
+
+// clearly display last used team for pit kart:
+function showLastUsedTeamForPitKart(kartId) {
+    const popup = document.getElementById('teamUsagePopup');
+    const teamNumberElem = document.getElementById('teamNumberPopup');
+    const listElem = document.getElementById('teamUsageList');
+
+    const usageHistory = kartUsage[kartId];
+
+    teamNumberElem.textContent = `Kart ${kartId}`;
+    listElem.innerHTML = "";
+
+    const li = document.createElement('li');
+    li.textContent = usageHistory && usageHistory.length
+        ? `Last used by ${usageHistory[usageHistory.length - 1]}`
+        : "No recorded team usage yet.";
+
+    listElem.appendChild(li);
+    popup.style.display = 'flex';
+}
+
+async function loadKartUsage() {
+    const snapshot = await get(ref(database, 'kartUsageP'));
+    kartUsage = snapshot.val() || {};
+    console.log("Kart usage loaded:", kartUsage);
+}
+
+async function saveKartUsage() {
+    await set(ref(database, 'kartUsageP'), kartUsage);
+}
+
+// clearly add team usage entry when kart is used:
+async function addKartUsage(kartId, teamNumber) {
+    if (!kartUsage[kartId]) {
+        kartUsage[kartId] = [];
+    }
+    kartUsage[kartId].push(`${teamNumber} at ${new Date().toLocaleTimeString()}`);
+    await saveKartUsage();
 }

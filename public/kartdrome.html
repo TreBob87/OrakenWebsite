@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv='cache-control' content='no-cache'>
+  <meta http-equiv='expires' content='0'>
+  <meta http-equiv='pragma' content='no-cache'>
+  <title>Oraken Karting Team - Dubai Kartdrome</title>
+  <link rel="stylesheet" href="../styles/kartdrome.css">
+</head>
+
+<body>
+  <nav>
+    <div class="navicon"><div></div></div>
+    <a href="../public/index.html">Home</a>
+    <a href="../public/portugal.html">Evora</a>
+    <a href="../public/kartingtown.html">Karting Town</a>
+    <a href="../public/yas.html">Yas Kartzone</a>
+    <a href="../public/kartUsage.html">Karts used</a>
+  </nav>
+
+  <div class="qualiMode">
+    <h2>Quali Mode</h2>
+    <label class="switch">
+      <input type="checkbox" id="qualiModeToggle" class="switch-input">
+      <span class="switch-label" data-on="On" data-off="Off"></span>
+      <span class="switch-handle"></span>
+    </label>
+  </div>
+  
+
+  <div class="container">
+    <h2>Karts on Track</h2>
+    <div id="kartsOnTrack" class="section"></div>
+
+    <h2>Pit Lane</h2>
+    <label class="sortButton">
+      <input class="sortButton-input" id="sortModeToggle" type="checkbox"/>
+      <span class="sortButton-label" data-on="Reverse" data-off="Forward"></span>
+      <span class="sortButton-handle"></span>
+    </label>
+    <div id="kartsInPit" class="section"></div>
+
+    <h2>Kart Performance</h2>
+    <div id="kartPerformance" class="section">
+      <div class="box" style="background-color: purple;"></div>
+      <div class="box" style="background-color: green;"></div>
+      <div class="box" style="background-color: yellow;"></div>
+      <div class="box" style="background-color: red;"></div>
+      <div class="box" style="background-color: grey;"></div>
+    </div>
+  
+
+  <div class="raceReset">
+    <button id="resetButton">Click here to Reset</button>
+    <button id="undoSwapButton">Undo Last Swap</button>
+  </div>
+
+  <div class="replaceKart">
+    <h2>Kart Replacement</h2>
+    <button id="replaceKartButton">Replace a Kart</button>
+    <div id="replaceKartPopup" class="popup">
+      <div class="popup-content">
+        <h3>Select a Kart to Replace</h3>
+        <div id="kartSelectionContainer"></div>
+        <button id="confirmReplacementButton">Confirm Replacement</button>
+        <button id="cancelButton">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="teamUsagePopup" class="popup">
+    <div class="popup-content">
+      <h3>Team <span id="teamNumberPopup"></span> Usage History</h3>
+      <ul id="teamUsageList"></ul>
+      <button id="closeTeamUsagePopup">Close</button>
+    </div>
+  </div>
+</div>
+
+  <script type="module" src="../scripts/kartdrome.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-import { auth } from "./firebase.js";
+import { auth } from "../scripts/firebase.js";
 
 
 const login = document.getElementById('userLogin')
@@ -16,7 +16,7 @@ login.addEventListener('submit', (e) => {
             // Signed in
             login['email'].value = '';
             login['password'].value = '';
-            window.location.href = 'index.html'
+            window.location.href = '../public/login.html';
         })
         .catch((error) => {
             const errorCode = error.code;

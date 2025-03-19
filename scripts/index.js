@@ -1,5 +1,5 @@
 import {onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-import {auth} from "./firebase.js";
+import {auth} from "../scripts/firebase.js";
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -11,6 +11,6 @@ onAuthStateChanged(auth, (user) => {
         // ...
     } else {
         // User is signed out
-        window.location.href = 'login.html'
+        window.location.href = '../public/login.html';
     }
 });

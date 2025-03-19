@@ -1,5 +1,5 @@
 import { ref, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
-import { database, auth } from "./firebase.js";
+import { database, auth } from "../scripts/firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
 onAuthStateChanged(auth, (user) => {
@@ -12,7 +12,7 @@ onAuthStateChanged(auth, (user) => {
         // ...
     } else {
         // User is signed out
-        window.location.href = 'login.html'
+        window.location.href = '../public/login.html';
     }
 });
 
