@@ -16,7 +16,7 @@ login.addEventListener('submit', (e) => {
             // Signed in
             login['email'].value = '';
             login['password'].value = '';
-            window.location.href = '../public/login.html';
+            window.location.href = '/login.html';
         })
         .catch((error) => {
             const errorCode = error.code;
