@@ -16,7 +16,7 @@ import { initQualiModeToggle, isQualiModeActive } from './utils/qualiMode.js';
 
 // ✅ Ensure user is authenticated before accessing the page
 onAuthStateChanged(auth, user => {
-    if (!user) window.location.href = '../public/login.html';
+    if (!user) window.location.href = '../login.html';
 });
 
 document.addEventListener('DOMContentLoaded', async () => {

@@ -5,7 +5,7 @@ import { database, auth } from "./firebase.js";
 // Ensure user is logged in
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = 'login.html';
+    window.location.href = '../login.html';
   }
 });
 
