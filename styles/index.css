@@ -4,70 +4,25 @@
 body {
     font-family: "Poppins", sans-serif;
     background-image: url("../Pictures/Oraken_Black.jpg");
+    background-position: center;
     background-size: cover;
+    background-attachment: fixed;
+
     user-select: none;
 }
 
-.container {
-    width: 100%;
-    margin: 0 auto;
-    position: relative; /* Adjust as needed based on your layout */
-    z-index: 1; /* Ensure content is above background but below navbar */
-    padding-top: 50px; /* Adjust based on navbar height */
-}
-
-.section {
-    margin-bottom: 20px;
-}
-
-.box {
-    display: inline-flex; /* Enables the use of flexbox properties */
-    justify-content: center; /* Horizontally centers the content */
-    align-items: center; /* Vertically centers the content */
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    border: 1px solid black;
-    cursor: pointer;
-    font-size: 12px; /* Adjust the font size as needed */
-    text-align: center;
-    overflow: hidden; /* Prevents text overflow */
-    text-overflow: ellipsis; /* Adds an ellipsis if the text overflows */
-    white-space: nowrap; /* Ensures the text stays on a single line */
-}
-
 @media screen and (max-width: 600px) {
-    .box {
-        width: 10vw;
-    }
-    .container {
-        width: 90%;
-    }
+    body {
+        background-size: contain;
+    }    
 }
 
-.raceReset {
-    margin-top: 20px;
-    text-align: center;
-}
-
-#resetButton {
-    padding: 10px 15px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#resetButton:hover {
-    background-color: #d32f2f;
-}
 
 /* Navbar styling */
 
 nav {
     position: absolute;
-    z-index: 2;
+    z-index:1;
     width: 300px;
     background: white;
     color: rgba(0, 0, 0, 0.87);
