@@ -97,6 +97,5 @@ document.addEventListener('click', (event) => {
     if (selectedColor && (!kartPerf || !kartPerf.contains(event.target))) {
         selectedColor = '';
         document.body.style.cursor = 'default';
-        console.log("Selected color cleared due to click outside kartPerformance.");
     }
 });

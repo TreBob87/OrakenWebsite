@@ -46,7 +46,6 @@ export function resetTeamCarUsage() {
 export async function loadKartUsage() {
     const snapshot = await get(ref(database, 'kartUsage'));
     kartUsage = snapshot.val() || {};
-    console.log("Kart usage loaded:", kartUsage);
 }
 
 export async function saveKartUsage() {

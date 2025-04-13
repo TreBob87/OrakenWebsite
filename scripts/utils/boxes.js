@@ -74,7 +74,6 @@ export async function saveSortOrderState(isAscending) {
     try {
         const sortOrderRef = ref(database, 'sortOrder');
         await set(sortOrderRef, { isAscending });
-        console.log("Sort order state saved:", isAscending);
     } catch (error) {
         console.error('Failed to save sort order state:', error);
     }

@@ -22,7 +22,6 @@ export function initQualiModeToggle() {
         if (toggle) {
           toggle.checked = data.isOn;
         }
-        console.log("Quali Mode state loaded from Firebase:", qualiModeActive);
       }
     } else {
       console.log("No Quali Mode data found in Firebase. Defaulting to OFF.");
@@ -54,7 +53,6 @@ export function initQualiModeToggle() {
 async function saveQualiModeState(isOn) {
   try {
     await set(ref(database, "qualiMode"), { isOn });
-    console.log("Quali Mode state saved to Firebase:", isOn);
   } catch (err) {
     console.error("Failed to save Quali Mode state:", err);
   }

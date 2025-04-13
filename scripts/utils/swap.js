@@ -8,7 +8,6 @@ export let lastSwap = null;
 export async function swapColorsAndIds(trackBox, pitBox, currentlyHighlighted, qualiModeActive) {
     // Explicit highlight check: Only perform swap if a valid box is highlighted.
     if (!currentlyHighlighted || !(currentlyHighlighted === trackBox || currentlyHighlighted === pitBox)) {
-        console.log("Swap aborted: No valid box highlighted");
         return;
     }
 
@@ -51,7 +50,6 @@ export async function swapColorsAndIds(trackBox, pitBox, currentlyHighlighted, q
             const newCarId = trackBox.getAttribute('data-car-id');
             const timestamp = new Date().toLocaleTimeString();
             teamCarUsage[teamNumber].push(`${newCarId} ${trackBox.style.backgroundColor} at ${timestamp}`);
-            console.log("Saving last used team", { pitKartId, teamNumber });
             return saveTeamCarUsage();
         };
 

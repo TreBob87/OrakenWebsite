@@ -11,8 +11,6 @@ export function addLongPressListener(box) {
             const isPitLane = box.parentNode.id === 'kartsInPit';
             const kartId = box.getAttribute('data-car-id');
 
-            console.log("Long-pressed box details:", { isPitLane, kartId });
-
             if (isPitLane) {
                 showLastUsedTeamForPitKart(kartId);
             } else {
