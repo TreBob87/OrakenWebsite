@@ -3,7 +3,7 @@ import { auth } from "../scripts/firebase.js";
 
 
 onAuthStateChanged(auth, user => {
-    if (user) window.location.href = 'OrakenWebsite/public/kartdrome.html';
+    if (user) window.location.href = './public/kartdrome.html';
 });
 
 
