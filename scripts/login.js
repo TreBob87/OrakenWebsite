@@ -29,7 +29,7 @@ login.addEventListener('submit', (e) => {
             // Signed in
             login['email'].value = '';
             login['password'].value = '';
-            window.location.href = '../public/kartdrome.html';
+            window.location.href = 'OrakenWebsite/public/kartdrome.html';
         })
         .catch((error) => {
             const errorCode = error.code;
