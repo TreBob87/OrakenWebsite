@@ -26,41 +26,33 @@ async function loadKartCounts() {
         const kartsOnTrackYasSnapshot = await get(kartsOnTrackRef);
         const kartsInPitYasSnapshot = await get(kartsInPitRef);
 
-        const kartsOnTrackCountYas = kartsOnTrackYasSnapshot.val() || 30; // Default to 45 if not found
+        const kartsOnTrackCountYas = kartsOnTrackYasSnapshot.val() || 45; // Default to 45 if not found
         const kartsInPitCountYas = kartsInPitYasSnapshot.val() || 10; // Default to 5 if not found
 
         return { kartsOnTrackCountYas, kartsInPitCountYas };
     } catch (error) {
         console.error('Error fetching kart counts from Firebase:', error);
-        return { kartsOnTrackCountYas: 45, kartsInPitCountYas: 5 };
+        return { kartsOnTrackCountYas: 45, kartsInPitCountYas: 10 };
     }
 }
 
 window.onload = async function() {
 
-    // Load counts from Firebase
-  const { kartsOnTrackCountYas, kartsInPitCountYas } = await loadKartCounts();
+    loadTeamCarUsage();
 
-  // Ensure 5 per lane × 2 lanes
-  const desiredPitCount = 10; // 5 per lane
-  let effectivePitCount = kartsInPitCountYas;
+    // Load counts from Firebase database
+    const { kartsOnTrackCountYas, kartsInPitCountYas } = await loadKartCounts();
 
-  // If DB has old value (e.g., 4), bump to 10 and persist once
-  if (kartsInPitCountYas < desiredPitCount) {
-    effectivePitCount = desiredPitCount;
-    await set(ref(database, 'kartsInPitCountYas'), desiredPitCount);
-  }
+    // Use the loaded or default counts to create boxes
+    createBoxes('kartsOnTrackYas', kartsOnTrackCountYas, 'Kart ');
+    createBoxes('kartsInPitYas', kartsInPitCountYas, 'Lane ');
+    loadBoxColors();
 
-  // Create boxes
-  createBoxes('kartsOnTrackYas', kartsOnTrackCountYas, 'Kart ');
-  createBoxes('kartsInPitYas', effectivePitCount, 'Lane ');
-  loadBoxColors();
-
-  // Event listeners
-  document.getElementById('kartPerformance').addEventListener('click', pickColor);
-  document.getElementById('kartsOnTrackYas').addEventListener('click', handleBoxClick);
-  document.getElementById('kartsInPitYas').addEventListener('click', handleBoxClick);
-  document.getElementById('resetButton').addEventListener('click', resetColors);
+    // Add event listeners
+    document.getElementById('kartPerformance').addEventListener('click', pickColor);
+    document.getElementById('kartsOnTrackYas').addEventListener('click', handleBoxClick);
+    document.getElementById('kartsInPitYas').addEventListener('click', handleBoxClick);
+    document.getElementById('resetButton').addEventListener('click', resetColors);
 };
 
 let selectedColor = '';
@@ -230,56 +222,50 @@ async function loadTeamCarUsage() {
 
 
 function swapColors() {
-  if (lastClickedBox.track && lastClickedBox.pit) {
-    const trackBox = lastClickedBox.track;
-    const pitBox   = lastClickedBox.pit;
+    if (lastClickedBox.track && lastClickedBox.pit) {
+        const trackBox = lastClickedBox.track;
+        const pitBox = lastClickedBox.pit;
 
-    // Determine lane by odd/even pit index (same idea as your current code)
-    const pitIdx = parseInt(pitBox.id.split('-').pop(), 10);
-    const isLane1 = pitIdx % 2 === 1;
+        // Determine the pit boxes to be swapped based on the clicked pit box
+        let pitBoxToSwapWith, otherPitBox;
+        if (pitBox.id.endsWith('-1') || pitBox.id.endsWith('-3')) {
+            pitBoxToSwapWith = document.getElementById('kartsInPitYas-1');
+            otherPitBox = document.getElementById('kartsInPitYas-3');
+        } else if (pitBox.id.endsWith('-2') || pitBox.id.endsWith('-4')) {
+            pitBoxToSwapWith = document.getElementById('kartsInPitYas-2');
+            otherPitBox = document.getElementById('kartsInPitYas-4');
+        }
 
-    // Lane 1 uses odd indices; Lane 2 uses even indices.
-    // We keep the fixed order (front to back) exactly like your current approach,
-    // just extended to 5 positions: [1,3,5,7,9] or [2,4,6,8,10].
-    const laneIds = isLane1 ? [1, 3, 5, 7, 9] : [2, 4, 6, 8, 10];
+        if (pitBoxToSwapWith && otherPitBox) {
+            // Swap the colors and data-car-id attributes
+            let tempColor = trackBox.style.backgroundColor;
+            let tempId = trackBox.getAttribute('data-car-id');
 
-    // Only include boxes that actually exist (in case the DB count isn’t 10 yet)
-    const laneEls = laneIds
-      .map(i => document.getElementById(`kartsInPitYas-${i}`))
-      .filter(Boolean);
+            trackBox.style.backgroundColor = pitBoxToSwapWith.style.backgroundColor;
+            trackBox.setAttribute('data-car-id', pitBoxToSwapWith.getAttribute('data-car-id'));
 
-    if (laneEls.length === 0) return;
+            pitBoxToSwapWith.style.backgroundColor = otherPitBox.style.backgroundColor;
+            pitBoxToSwapWith.setAttribute('data-car-id', otherPitBox.getAttribute('data-car-id'));
 
-    // Perform a simple “right rotation by 1” across [track, lane[0], lane[1], ..., lane[n-1]]
-    // This preserves your original three-way swap pattern but for 5 items:
-    // track <= lane[0], lane[0] <= lane[1], ..., lane[n-2] <= lane[n-1], lane[n-1] <= track
-    const nodes = [trackBox, ...laneEls];
+            otherPitBox.style.backgroundColor = tempColor;
+            otherPitBox.setAttribute('data-car-id', tempId);
 
-    const tempColor = nodes[0].style.backgroundColor;
-    const tempId    = nodes[0].getAttribute('data-car-id');
+            // Force the browser to repaint the updated elements
+            trackBox.offsetHeight;
+            pitBoxToSwapWith.offsetHeight;
+            otherPitBox.offsetHeight;
 
-    for (let i = 0; i < nodes.length - 1; i++) {
-      nodes[i].style.backgroundColor = nodes[i + 1].style.backgroundColor;
-      nodes[i].setAttribute('data-car-id', nodes[i + 1].getAttribute('data-car-id'));
-      saveBoxColor(nodes[i]);
+            // Save the updated colors to the database
+            saveBoxColor(trackBox);
+            saveBoxColor(pitBoxToSwapWith);
+            saveBoxColor(otherPitBox);
+            saveTeamCarUsage()
+        }
+
+        lastClickedBox.track = null;
+        lastClickedBox.pit = null;
     }
-
-    const last = nodes[nodes.length - 1];
-    last.style.backgroundColor = tempColor;
-    last.setAttribute('data-car-id', tempId);
-    saveBoxColor(last);
-
-    // Force repaint if you like
-    nodes.forEach(n => { void n.offsetHeight; });
-
-    saveTeamCarUsage();
-
-    lastClickedBox.track = null;
-    lastClickedBox.pit = null;
-    currentlyHighlighted = null;
-  }
 }
-
 
 
 
@@ -287,10 +273,10 @@ function swapColors() {
 async function resetColors() {
     if (confirm('Are you sure you want to reset all colors and change the number of karts?')) {
         try {
-            const kartsOnTrackCountYas = parseInt(prompt("Enter the number of Karts-on-Track:", "10"), 30);
-            const kartsInPitCountYas = parseInt(prompt("Enter the number of Karts-in-Pit:", "4"), 10);
+            const kartsOnTrackCountYas = parseInt(prompt("Enter the number of Karts-on-Track:", "35"), 10);
+            const kartsInPitCountYas = parseInt(prompt("Enter the number of Karts-in-Pit:", "10"), 10);
 
-            const validKartsOnTrackCountYas = isNaN(kartsOnTrackCountYas) ? 30 : kartsOnTrackCountYas;
+            const validKartsOnTrackCountYas = isNaN(kartsOnTrackCountYas) ? 35 : kartsOnTrackCountYas;
             const validKartsInPitCountYas = isNaN(kartsInPitCountYas) ? 10 : kartsInPitCountYas;
 
             await set(ref(database, 'kartsOnTrackCountYas'), validKartsOnTrackCountYas);
