@@ -2,6 +2,7 @@
 import { ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 import { database, auth} from "../scripts/firebase.js";
+import { undoLastSwap } from './utils/swap.js';
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -53,6 +54,7 @@ window.onload = async function() {
     document.getElementById('kartsOnTrackYas').addEventListener('click', handleBoxClick);
     document.getElementById('kartsInPitYas').addEventListener('click', handleBoxClick);
     document.getElementById('resetButton').addEventListener('click', resetColors);
+    document.getElementById('undoSwapButton').addEventListener('click', undoLastSwap);
 };
 
 let selectedColor = '';
@@ -222,50 +224,59 @@ async function loadTeamCarUsage() {
 
 
 function swapColors() {
-    if (lastClickedBox.track && lastClickedBox.pit) {
-        const trackBox = lastClickedBox.track;
-        const pitBox = lastClickedBox.pit;
+  if (!(lastClickedBox.track && lastClickedBox.pit)) return;
 
-        // Determine the pit boxes to be swapped based on the clicked pit box
-        let pitBoxToSwapWith, otherPitBox;
-        if (pitBox.id.endsWith('-1') || pitBox.id.endsWith('-3')) {
-            pitBoxToSwapWith = document.getElementById('kartsInPitYas-1');
-            otherPitBox = document.getElementById('kartsInPitYas-3');
-        } else if (pitBox.id.endsWith('-2') || pitBox.id.endsWith('-4')) {
-            pitBoxToSwapWith = document.getElementById('kartsInPitYas-2');
-            otherPitBox = document.getElementById('kartsInPitYas-4');
-        }
+  const trackBox = lastClickedBox.track;
+  const pitBox   = lastClickedBox.pit;
 
-        if (pitBoxToSwapWith && otherPitBox) {
-            // Swap the colors and data-car-id attributes
-            let tempColor = trackBox.style.backgroundColor;
-            let tempId = trackBox.getAttribute('data-car-id');
+  // determine lane based on odd/even id (same as your current logic intent)
+  const pitIdx = parseInt(pitBox.id.split('-').pop(), 10);
+  const isLane1 = pitIdx % 2 === 1;
 
-            trackBox.style.backgroundColor = pitBoxToSwapWith.style.backgroundColor;
-            trackBox.setAttribute('data-car-id', pitBoxToSwapWith.getAttribute('data-car-id'));
+  // Build the lane order: odd IDs or even IDs up to however many boxes exist
+  const allPitBoxes = document.querySelectorAll('#kartsInPitYas .box');
+  const maxId = Array.from(allPitBoxes).length; // IDs are sequential 1..N
 
-            pitBoxToSwapWith.style.backgroundColor = otherPitBox.style.backgroundColor;
-            pitBoxToSwapWith.setAttribute('data-car-id', otherPitBox.getAttribute('data-car-id'));
+  const laneIds = [];
+  for (let i = isLane1 ? 1 : 2; i <= maxId; i += 2) {
+    const el = document.getElementById(`kartsInPitYas-${i}`);
+    if (el) laneIds.push(i);
+  }
 
-            otherPitBox.style.backgroundColor = tempColor;
-            otherPitBox.setAttribute('data-car-id', tempId);
+  // Map to actual elements
+  const laneEls = laneIds.map(i => document.getElementById(`kartsInPitYas-${i}`)).filter(Boolean);
+  if (laneEls.length === 0) return;
 
-            // Force the browser to repaint the updated elements
-            trackBox.offsetHeight;
-            pitBoxToSwapWith.offsetHeight;
-            otherPitBox.offsetHeight;
+  // Rotate across [track, lane[0], lane[1], ... lane[n-1]]
+  const nodes = [trackBox, ...laneEls];
 
-            // Save the updated colors to the database
-            saveBoxColor(trackBox);
-            saveBoxColor(pitBoxToSwapWith);
-            saveBoxColor(otherPitBox);
-            saveTeamCarUsage()
-        }
+  // store first
+  const firstColor = nodes[0].style.backgroundColor;
+  const firstId    = nodes[0].getAttribute('data-car-id');
 
-        lastClickedBox.track = null;
-        lastClickedBox.pit = null;
-    }
+  // shift left by one (track <= lane[0], lane[0] <= lane[1], ..., lane[n-2] <= lane[n-1])
+  for (let i = 0; i < nodes.length - 1; i++) {
+    nodes[i].style.backgroundColor = nodes[i + 1].style.backgroundColor;
+    nodes[i].setAttribute('data-car-id', nodes[i + 1].getAttribute('data-car-id'));
+    saveBoxColor(nodes[i]);
+  }
+
+  // last <= original track
+  const last = nodes[nodes.length - 1];
+  last.style.backgroundColor = firstColor;
+  last.setAttribute('data-car-id', firstId);
+  saveBoxColor(last);
+
+  // force repaint (optional)
+  nodes.forEach(n => { void n.offsetHeight; });
+
+  saveTeamCarUsage();
+
+  lastClickedBox.track = null;
+  lastClickedBox.pit = null;
+  currentlyHighlighted = null;
 }
+
 
 
 

@@ -165,3 +165,18 @@ a:active { background: #2E2F2F; }
 #resetButton:hover {
     background-color: #d32f2f;
 }
+
+/* New Undo Button Styling */
+#undoSwapButton {
+    padding: 10px 15px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#undoSwapButton:hover {
+    background-color: #1976D2;
+}
